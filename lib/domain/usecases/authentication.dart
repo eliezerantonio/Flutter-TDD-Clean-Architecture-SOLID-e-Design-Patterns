@@ -3,12 +3,12 @@ import 'package:meta/meta.dart';
 import '../entities/entities.dart';
 
 abstract class Authentication {
-  Future<AccountEntity> auth(Authenticationparams params);
+  Future<AccountEntity> auth(AuthenticationParams params);
 }
 
-class Authenticationparams {
+class AuthenticationParams {
   final String email;
   final String secret;
 
-  Authenticationparams(this.email, this.secret);
+  AuthenticationParams({@required this.email, @required this.secret});
 }
