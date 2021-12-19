@@ -1,0 +1,1 @@
+enum HttpError { badRequest }
