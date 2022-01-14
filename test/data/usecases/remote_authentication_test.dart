@@ -24,6 +24,16 @@ void main() {
         email: faker.internet.email(), secret: faker.internet.password());
   });
   test('Should call HttpClient with currect Values', () async {
+    when(httpClient.request(
+            url: anyNamed('url'),
+            method: anyNamed('method'),
+            body: anyNamed('body')))
+        .thenAnswer(
+      (_) async => {
+        'accessToken': faker.guid.guid(),
+        'name': faker.person.name(),
+      },
+    );
     await sut.auth(params);
 
     verify(httpClient.request(
@@ -32,6 +42,7 @@ void main() {
         body: {'email': params.email, 'password': params.secret}));
   });
 
+//Error
   test("Should throw UnexpectedError if HttpClient returns 400", () async {
     when(httpClient.request(
             url: anyNamed('url'),
@@ -54,7 +65,7 @@ void main() {
 
     expect(future, throwsA(DomainError.unexpected));
   });
-  
+
   test("Should throw UnexpectedError if HttpClient returns 500", () async {
     when(httpClient.request(
             url: anyNamed('url'),
@@ -65,5 +76,36 @@ void main() {
     final future = sut.auth(params);
 
     expect(future, throwsA(DomainError.unexpected));
+  });
+  test("Should throw InvalidCredentialError if HttpClient returns 401",
+      () async {
+    when(httpClient.request(
+            url: anyNamed('url'),
+            method: anyNamed('method'),
+            body: anyNamed('body')))
+        .thenThrow(HttpError.unauthorized);
+
+    final future = sut.auth(params);
+
+    expect(future, throwsA(DomainError.invalidCredentials));
+  });
+  //Success
+
+  test('Should return an Account if HttpClient returns 200', () async {
+    final acessToken = faker.guid.guid();
+    when(httpClient.request(
+            url: anyNamed('url'),
+            method: anyNamed('method'),
+            body: anyNamed('body')))
+        .thenAnswer(
+      (_) async => {
+        'accessToken': acessToken,
+        'name': faker.person.name(),
+      },
+    );
+
+    final account = await sut.auth(params);
+
+    expect(account.token, acessToken);
   });
 }

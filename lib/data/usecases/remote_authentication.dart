@@ -1,3 +1,4 @@
+import 'package:flutter_tdd_clean_architecture/domain/entities/account_entity.dart';
 import 'package:meta/meta.dart';
 
 import '../../domain/helpers/helpers.dart';
@@ -10,14 +11,18 @@ class RemoteAuthentication {
   final String url;
   RemoteAuthentication({@required this.httpClient, this.url});
 
-  Future<void> auth(AuthenticationParams params) async {
+  Future<AccountEntity> auth(AuthenticationParams params) async {
     try {
-      await httpClient.request(
+      final httpResponse = await httpClient.request(
           url: url,
           method: 'post',
           body: RemoteAuthenticationParams.fromDomain(params).toJson());
-    } on HttpError {
-      throw DomainError.unexpected;
+
+      return AccountEntity.fromJson(httpResponse);
+    } on HttpError catch (error) {
+      throw error == HttpError.unauthorized
+          ? DomainError.invalidCredentials
+          : DomainError.unexpected;
     }
   }
 }
