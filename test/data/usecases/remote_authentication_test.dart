@@ -92,6 +92,8 @@ void main() {
     expect(account.token, validData['accessToken']);
   });
 
+
+
   test(
       'Should throw UnexpectedError if HttpClient returns 200 with invalid data ',
       () async {
@@ -104,4 +106,7 @@ void main() {
 
     expect(future, throwsA(DomainError.unexpected));
   });
+
+
+
 }
