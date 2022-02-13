@@ -8,9 +8,13 @@ class HttpAdapter {
   final Client client;
 
   HttpAdapter(this.client);
-  Future<Map> request(
-      {@required String url, @required String method, Map body}) {
-    client.post(Uri.parse(url));
+  Future<void> request(
+      {@required String url, @required String method, Map body}) async {
+    final headers = {
+      'content-type': 'application/json',
+      'accept': 'application/json',
+    };
+    await client.post(Uri.parse(url), headers: headers);
   }
 }
 
@@ -25,7 +29,17 @@ void main() {
 
       await sut.request(url: url, method: 'post');
 
-      verify(client.post(Uri.parse(url)));
+      verify(
+        client.post(
+          Uri.parse(
+            url,
+          ),
+          headers: {
+            'content-type': 'application/json',
+            'accept': 'application/json',
+          },
+        ),
+      );
     });
   });
 }
