@@ -27,6 +27,7 @@ dependencies:
   http: ^0.13.4
 
 dev_dependencies:
+  flutter_launcher_icons: ^0.9.2
   faker: null
   flutter_test:
     sdk: flutter
@@ -68,3 +69,8 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+flutter_icons:
+  ios: true
+  android: true
+  image_path_android: lib/ui/assets/icon/android.png
+  image_path_ios: lib/ui/assets/icon/ios.png
