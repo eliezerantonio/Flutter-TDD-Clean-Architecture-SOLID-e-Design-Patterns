@@ -51,7 +51,7 @@ class App extends StatelessWidget {
           ),
         ),
       ),
-      home: LoginPage(),
+      home: LoginPage(null),
     );
   }
 }
