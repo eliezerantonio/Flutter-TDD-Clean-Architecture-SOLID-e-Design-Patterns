@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../components/componets.dart';
 import '../pages.dart';
 import 'components/components.dart';
+import 'components/password_input.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage(this.presenter);
@@ -50,30 +51,14 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                   padding: const EdgeInsets.all(32),
                   child: Provider(
-                    create: (_)=>widget.presenter,
+                    create: (_) => widget.presenter,
                     child: Form(
                       child: Column(
                         children: [
                           EmailInput(),
                           Padding(
                             padding: const EdgeInsets.only(top: 8, bottom: 32),
-                            child: StreamBuilder(
-                                stream: widget.presenter.passwordErrorStream,
-                                builder: (context, snapshot) {
-                                  return TextFormField(
-                                    obscureText: true,
-                                    onChanged: widget.presenter.validatePassword,
-                                    decoration: InputDecoration(
-                                      labelText: 'Senha',
-                                      errorText: snapshot.data?.isEmpty == true
-                                          ? null
-                                          : snapshot.data,
-                                      icon: Icon(Icons.lock,
-                                          color: Theme.of(context)
-                                              .primaryColorLight),
-                                    ),
-                                  );
-                                }),
+                            child: PasswordInput(),
                           ),
                           StreamBuilder<bool>(
                               stream: widget.presenter.isFormValidStream,
