@@ -22,7 +22,7 @@ void main() {
 
     when(presenter.emailErrorStream)
         .thenAnswer((_) => emailErrorController.stream);
-        
+
     when(presenter.passwordErrorStream)
         .thenAnswer((_) => passwordErrorController.stream);
 
@@ -132,5 +132,21 @@ void main() {
     await tester.pump();
 
     expect(find.text('any error'), findsOneWidget);
+  });
+
+  testWidgets('Should present no error if password is valid',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    passwordErrorController.add(null);
+    await tester.pump(); //reaload
+
+    expect(
+      find.descendant(
+          of: find.bySemanticsLabel('Senha'), matching: find.byType(Text)),
+      findsWidgets,
+    );
+
+    
   });
 }
