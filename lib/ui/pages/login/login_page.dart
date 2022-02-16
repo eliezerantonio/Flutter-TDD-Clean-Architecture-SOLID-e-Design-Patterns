@@ -20,52 +20,53 @@ class LoginPage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(32),
               child: StreamBuilder<String>(
-                stream: presenter.emailErrorStream,
-                builder: (context, snapshot) {
-                  return Form(
-                    child: Column(
-                      children: [
-                        TextFormField(
-                          keyboardType: TextInputType.emailAddress,
-                          onChanged: presenter.validateEmail,
-                          
-                          decoration: InputDecoration(
-                            errorText: snapshot.data,
-                            labelText: 'Email',
-                            icon: Icon(Icons.email,
-                                color: Theme.of(context).primaryColorLight),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8, bottom: 32),
-                          child: TextFormField(
-                            obscureText: true,
-                            onChanged: presenter.validatePassword,
+                  stream: presenter.emailErrorStream,
+                  builder: (context, snapshot) {
+                    return Form(
+                      child: Column(
+                        children: [
+                          TextFormField(
+                            keyboardType: TextInputType.emailAddress,
+                            onChanged: presenter.validateEmail,
                             decoration: InputDecoration(
-                              labelText: 'Senha',
-                              icon: Icon(Icons.lock,
+                              errorText: snapshot.data?.isEmpty == true
+                                  ? null
+                                  : snapshot.data,
+                              labelText: 'Email',
+                              icon: Icon(Icons.email,
                                   color: Theme.of(context).primaryColorLight),
                             ),
                           ),
-                        ),
-                        ElevatedButton(
-                          onPressed: null,
-                          child: Text("Senha".toUpperCase()),
-                        ),
-                        TextButton.icon(
-                          onPressed: () {},
-                          icon: Icon(Icons.person,
-                              color: Theme.of(context).primaryColor),
-                          label: Text(
-                            'Criar conta',
-                            style: TextStyle(color: Theme.of(context).primaryColor),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8, bottom: 32),
+                            child: TextFormField(
+                              obscureText: true,
+                              onChanged: presenter.validatePassword,
+                              decoration: InputDecoration(
+                                labelText: 'Senha',
+                                icon: Icon(Icons.lock,
+                                    color: Theme.of(context).primaryColorLight),
+                              ),
+                            ),
                           ),
-                        )
-                      ],
-                    ),
-                  );
-                }
-              ),
+                          ElevatedButton(
+                            onPressed: null,
+                            child: Text("Senha".toUpperCase()),
+                          ),
+                          TextButton.icon(
+                            onPressed: () {},
+                            icon: Icon(Icons.person,
+                                color: Theme.of(context).primaryColor),
+                            label: Text(
+                              'Criar conta',
+                              style: TextStyle(
+                                  color: Theme.of(context).primaryColor),
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  }),
             ),
           ],
         ),
