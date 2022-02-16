@@ -14,6 +14,7 @@ void main() {
   StreamController<String> emailErrorController;
   StreamController<String> passwordErrorController;
   StreamController<bool> isFormValidController;
+  StreamController<bool> isLoadingController;
 
   Future<void> loadPage(WidgetTester tester) async {
     presenter = LoginPresenterSpy();
@@ -21,6 +22,7 @@ void main() {
     emailErrorController = new StreamController<String>();
     passwordErrorController = new StreamController<String>();
     isFormValidController = new StreamController<bool>();
+    isLoadingController = new StreamController<bool>();
 
     when(presenter.emailErrorStream)
         .thenAnswer((_) => emailErrorController.stream);
@@ -30,6 +32,9 @@ void main() {
     when(presenter.isFormValidStream)
         .thenAnswer((_) => isFormValidController.stream);
 
+    when(presenter.isLoadingStream)
+        .thenAnswer((_) => isLoadingController.stream);
+
     final loginPage = MaterialApp(home: LoginPage(presenter));
     await tester.pumpWidget(loginPage);
   }
@@ -38,6 +43,7 @@ void main() {
     emailErrorController.close();
     passwordErrorController.close();
     isFormValidController.close();
+    isLoadingController.close();
   });
 
   testWidgets(
@@ -69,6 +75,7 @@ void main() {
       final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
 
       expect(button.onPressed, null);
+      expect(find.byType(CircularProgressIndicator), findsNothing);
     },
   );
 
@@ -196,7 +203,7 @@ void main() {
     expect(button.onPressed, null);
   });
 
-  testWidgets('Shouldcall authentication on form submit ',
+  testWidgets('Should call authentication on form submit ',
       (WidgetTester tester) async {
     await loadPage(tester);
 
@@ -208,5 +215,16 @@ void main() {
     await tester.pump();
 
     verify(presenter.auth()).called(1);
+  });
+
+  testWidgets("Should hide loading", (WidgetTester tester) async {
+    await loadPage(tester);
+
+    isLoadingController.add(true);
+    await tester.pump();
+    isLoadingController.add(false);
+    await tester.pump();
+
+    expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 }
