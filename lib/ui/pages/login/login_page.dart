@@ -57,10 +57,15 @@ class LoginPage extends StatelessWidget {
                                   );
                                 }),
                           ),
-                          ElevatedButton(
-                            onPressed: null,
-                            child: Text("Senha".toUpperCase()),
-                          ),
+                          StreamBuilder<bool>(
+                              stream: presenter.isFormValidStream,
+                              builder: (context, snapshot) {
+                                return ElevatedButton(
+                                  onPressed:
+                                      snapshot.data == true ? () {} : null,
+                                  child: Text("Senha".toUpperCase()),
+                                );
+                              }),
                           TextButton.icon(
                             onPressed: () {},
                             icon: Icon(Icons.person,

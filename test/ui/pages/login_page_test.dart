@@ -13,18 +13,22 @@ void main() {
 
   StreamController<String> emailErrorController;
   StreamController<String> passwordErrorController;
+  StreamController<bool> isFormValidController;
 
   Future<void> loadPage(WidgetTester tester) async {
     presenter = LoginPresenterSpy();
 
     emailErrorController = new StreamController<String>();
     passwordErrorController = new StreamController<String>();
+    isFormValidController = new StreamController<bool>();
 
     when(presenter.emailErrorStream)
         .thenAnswer((_) => emailErrorController.stream);
 
     when(presenter.passwordErrorStream)
         .thenAnswer((_) => passwordErrorController.stream);
+    when(presenter.isFormValidStream)
+        .thenAnswer((_) => isFormValidController.stream);
 
     final loginPage = MaterialApp(home: LoginPage(presenter));
     await tester.pumpWidget(loginPage);
@@ -32,6 +36,8 @@ void main() {
 
   tearDown(() {
     emailErrorController.close();
+    passwordErrorController.close();
+    isFormValidController.close();
   });
 
   testWidgets(
@@ -160,5 +166,20 @@ void main() {
           of: find.bySemanticsLabel('Senha'), matching: find.byType(Text)),
       findsOneWidget,
     );
+  });
+
+  ///habilitar botao se formulario for valido
+  ///
+  testWidgets('Should enabled button if form is valid',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    isFormValidController.add(true);
+
+    await tester.pump(); //reload
+
+    final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+
+    expect(button.onPressed, isNotNull);
   });
 }
