@@ -1,13 +1,10 @@
 import 'dart:async';
 
 import 'package:faker/faker.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter_tdd_clean_architecture/presentation/presenters/protocols/validation.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
-
-abstract class Validation {
-  String validate({@required String field, @required String value});
-}
+import 'package:flutter/foundation.dart';
 
 class LoginState {
   String emailError;
