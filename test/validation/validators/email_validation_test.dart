@@ -18,13 +18,12 @@ void main() {
 
   ///se nao tem valor
   test('Should return null if email is empty', () {
-    final error = sut.validate('');
-
-    expect(error, null);
+    expect(sut.validate(''), null);
   });
   test('Should return null if email is null', () {
-    final error = sut.validate(null);
-
-    expect(error, null);
+    expect(sut.validate(null), null);
+  });
+  test('Should return null if email is valid', () {
+    expect(sut.validate('eliezer@gmail.com'), null);
   });
 }
