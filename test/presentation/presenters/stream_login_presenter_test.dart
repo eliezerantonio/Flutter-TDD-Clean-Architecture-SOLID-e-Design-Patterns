@@ -167,4 +167,10 @@ void main() {
         expectAsync1((error) => expect(error, 'Deu errado, tente novamente')));
     await sut.auth();
   });
+  test('Should not emit efter dispose', () async {
+    expectLater(sut.emailErrorStream, neverEmits(null));
+
+    sut.dispose();
+    sut.validateEmail(email);
+  });
 }
