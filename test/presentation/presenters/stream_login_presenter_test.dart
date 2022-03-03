@@ -81,4 +81,21 @@ void main() {
     sut.validatePassword(password);
     sut.validatePassword(password);
   });
+
+//somente o email vai tar com error, espero que o meu email stream retorna r erro
+  test('Should emit password error if validation fails ', () {
+    mockValidation(field: 'email', value: 'error');
+
+    sut.emailErrorStream
+        .listen(expectAsync1((error) => expect(error, 'error')));
+
+    sut.passwordErrorStream
+        .listen(expectAsync1((error) => expect(error, null)));
+
+    sut.isFormValidStream
+        .listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut.validateEmail(password);
+    sut.validatePassword(password);
+  });
 }
