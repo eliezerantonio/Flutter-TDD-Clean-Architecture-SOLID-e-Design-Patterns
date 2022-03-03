@@ -11,19 +11,27 @@ class RequiredFieldValidation implements FieldValidation {
   RequiredFieldValidation(this.field);
   @override
   String validate(String value) {
-    return null;
+    return value.isEmpty ? 'Campo obrigatorio' : null;
   }
 }
 
 void main() {
-  //se o campo estiver vazio retorna erro
+  RequiredFieldValidation sut;
 
+  setUp(() {
+    sut = RequiredFieldValidation('any_field');
+  });
   //se tiver vazio retorna null aka success
   test('Should return null if value is not empty', () {
-    final sut = RequiredFieldValidation('any_field');
 
-    final error = sut.validate('any_value');
+    expect(sut.validate('any_value'), null);
+  });
 
-    expect(error, null);
+  //se o campo estiver vazio retorna erro
+
+  test('Should return error if value is  empty', () {
+  
+
+    expect(sut.validate(''), 'Campo obrigatorio');
   });
 }
