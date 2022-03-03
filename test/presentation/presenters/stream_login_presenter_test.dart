@@ -1,4 +1,5 @@
 import 'package:faker/faker.dart';
+import 'package:flutter_tdd_clean_architecture/domain/entities/entities.dart';
 import 'package:flutter_tdd_clean_architecture/domain/usecases/usecases.dart';
 import 'package:flutter_tdd_clean_architecture/presentation/presenters/presenters.dart';
 import 'package:flutter_tdd_clean_architecture/presentation/presenters/protocols/protocols.dart';
@@ -20,14 +21,22 @@ void main() {
       field: field == null ? anyNamed('field') : field,
       value: anyNamed('value')));
 
+  PostExpectation mockAuthenticationCall() => when(authentication.auth(any));
+
   void mockValidation({String field, String value}) {
     mockValidationCall(field).thenReturn(value);
+  }
+
+  void mockAuthentication({String field, String value}) {
+    mockAuthenticationCall()
+        .thenAnswer((_) => AccountEntity(faker.guid.guid()));
   }
 
   setUp(() {
     validation = ValidationSpy();
     authentication = AuthenticationSpy();
-    sut = StreamLoginPresenter(validation: validation, authentication: authentication);
+    sut = StreamLoginPresenter(
+        validation: validation, authentication: authentication);
     email = faker.internet.email();
     password = faker.internet.password();
     mockValidation();
@@ -124,5 +133,12 @@ void main() {
     verify(authentication
             .auth(AuthenticationParams(email: email, secret: password)))
         .called(1);
+  });
+  test('Should emit currect eventson Authentication success', () async {
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+    await sut.auth();
   });
 }
