@@ -1,8 +1,8 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_tdd_clean_architecture/presentation/presenters/presenters.dart';
 import 'package:flutter_tdd_clean_architecture/presentation/presenters/protocols/protocols.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:test/test.dart';
 
 class ValidationSpy extends Mock implements Validation {}
 
@@ -55,5 +55,21 @@ void main() {
   test('Should call validation with correct password', () {
     sut.validatePassword(password);
     verify(validation.validate(field: 'password', value: password)).called(1);
+  });
+  test('Should call validation with correct password', () {
+    sut.validatePassword(password);
+    verify(validation.validate(field: 'password', value: password)).called(1);
+  });
+
+  test('Should emit password error if validation fails ', () {
+    mockValidation(value: 'error');
+
+    sut.passwordErrorStream
+        .listen(expectAsync1((error) => expect(error, 'error')));
+    sut.isFormValidStream
+        .listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut.validatePassword(password);
+    sut.validatePassword(password);
   });
 }
