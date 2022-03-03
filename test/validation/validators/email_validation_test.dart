@@ -18,6 +18,6 @@ void main() {
     expect(sut.validate('eliezer@gmail.com'), null);
   });
   test('Should return null if email is invalid', () {
-    expect(sut.validate('eliezer@gmail'), null);
+    expect(sut.validate('eliezer'), 'Campo invalido');
   });
 }

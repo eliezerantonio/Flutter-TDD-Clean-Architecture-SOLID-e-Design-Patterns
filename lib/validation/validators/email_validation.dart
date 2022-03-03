@@ -10,6 +10,6 @@ class EmailValidation implements FieldValidation {
 
     final isValid = value?.isNotEmpty != true || regex.hasMatch(value);
 
-    return isValid ? null : 'Campo invavido';
+    return isValid ? null : 'Campo invalido';
   }
 }
