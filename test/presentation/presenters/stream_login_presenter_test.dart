@@ -1,5 +1,6 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_tdd_clean_architecture/domain/entities/entities.dart';
+import 'package:flutter_tdd_clean_architecture/domain/helpers/domain_error.dart';
 import 'package:flutter_tdd_clean_architecture/domain/usecases/usecases.dart';
 import 'package:flutter_tdd_clean_architecture/presentation/presenters/presenters.dart';
 import 'package:flutter_tdd_clean_architecture/presentation/presenters/protocols/protocols.dart';
@@ -30,6 +31,10 @@ void main() {
   void mockAuthentication({String field, String value}) {
     mockAuthenticationCall()
         .thenAnswer((_) => AccountEntity(faker.guid.guid()));
+  }
+
+  void mockAuthenticationError(DomainError error) {
+    mockAuthenticationCall().thenThrow(error);
   }
 
   setUp(() {
@@ -134,11 +139,22 @@ void main() {
             .auth(AuthenticationParams(email: email, secret: password)))
         .called(1);
   });
-  test('Should emit currect eventson Authentication success', () async {
+  test('Should emit currect events on Authentication success', () async {
     sut.validateEmail(email);
     sut.validatePassword(password);
 
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+    await sut.auth();
+  });
+
+  test('Should emit currect event on InvalidCredentialError', () async {
+    mockAuthenticationError(DomainError.invalidCredentials);
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+
+    expectLater(sut.isLoadingStream, emits(false));
+    sut.mainErrorStream
+        .listen(expectAsync1((error) => expect(error, 'Invalid credencials')));
     await sut.auth();
   });
 }
