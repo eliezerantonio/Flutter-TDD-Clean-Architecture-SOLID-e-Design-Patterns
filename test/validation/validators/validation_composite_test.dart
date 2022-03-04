@@ -9,7 +9,11 @@ class ValidationComposeite implements Validation {
   ValidationComposeite(this.validations);
   @override
   String validate({String field, String value}) {
-    return null;
+    String error;
+    for (final validation in this.validations) {
+      error = validation.validate(value);
+    }
+    return error;
   }
 }
 
@@ -28,7 +32,6 @@ void main() {
     when(validation1.validate(any)).thenReturn(error);
   }
 
-  
   setUp(() {
     validation1 = FieldValidationSpy();
     validation2 = FieldValidationSpy();
@@ -39,9 +42,23 @@ void main() {
     mockValidation1(null);
 
     when(validation2.field).thenReturn('any_field');
+    mockValidation2(null);
+
+    final error = sut.validate(field: 'any_field', value: 'any_value');
+    expect(error, null);
+  });
+  test('Should return null if all validation return empty', () {
     mockValidation2('');
 
     final error = sut.validate(field: 'any_field', value: 'any_value');
     expect(error, null);
+  });
+  test('Should return null if all validation return null or empty', () {
+    mockValidation1('error_1');
+
+    mockValidation2('error_2');
+
+    final error = sut.validate(field: 'any_field', value: 'any_value');
+    expect(error, 'error_1');
   });
 }
