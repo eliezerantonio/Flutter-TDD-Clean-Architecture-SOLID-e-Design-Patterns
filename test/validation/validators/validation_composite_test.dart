@@ -19,6 +19,16 @@ void main() {
   FieldValidationSpy validation1;
   FieldValidationSpy validation2;
   ValidationComposeite sut;
+
+  void mockValidation1(String error) {
+    when(validation1.validate(any)).thenReturn(error);
+  }
+
+  void mockValidation2(String error) {
+    when(validation1.validate(any)).thenReturn(error);
+  }
+
+  
   setUp(() {
     validation1 = FieldValidationSpy();
     validation2 = FieldValidationSpy();
@@ -26,10 +36,10 @@ void main() {
   });
   test('Should return null if all validation return null or empty', () {
     when(validation1.field).thenReturn('any_field');
-    when(validation1.validate(any)).thenReturn(null);
+    mockValidation1(null);
 
     when(validation2.field).thenReturn('any_field');
-    when(validation2.validate(any)).thenReturn(null);
+    mockValidation2('');
 
     final error = sut.validate(field: 'any_field', value: 'any_value');
     expect(error, null);
