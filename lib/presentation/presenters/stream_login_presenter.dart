@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 
 import '../../domain/helpers/domain_error.dart';
 import '../../domain/usecases/usecases.dart';
+import '../../ui/pages/pages.dart';
 import 'protocols/protocols.dart';
 
 class LoginState {
@@ -21,7 +22,7 @@ class LoginState {
       password != null;
 }
 
-class StreamLoginPresenter {
+class StreamLoginPresenter implements LoginPresenter {
   StreamLoginPresenter(
       {@required this.authentication, @required this.validation});
 
@@ -78,4 +79,5 @@ class StreamLoginPresenter {
     _controller.close();
     _controller = null;
   }
+
 }
