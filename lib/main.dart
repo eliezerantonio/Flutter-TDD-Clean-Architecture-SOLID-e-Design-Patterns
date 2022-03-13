@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_tdd_clean_architecture/factories/pages/login/login_page_factory.dart';
 import 'package:get/route_manager.dart';
 
 import 'ui/components/componets.dart';
@@ -21,7 +22,9 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: makeAppATheme(),
       home: LoginPage(null),
-      getPages: [GetPage(name: '/login', page: ()=>)],
+      getPages: [
+        GetPage(name: '/login', page: makeLoginPage),
+      ],
     );
   }
 }
