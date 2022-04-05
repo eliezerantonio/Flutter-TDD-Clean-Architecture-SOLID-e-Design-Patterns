@@ -4,5 +4,5 @@ import 'package:flutter_tdd_clean_architecture/factories/pages/login/login_prese
 import '../../../ui/pages/pages.dart';
 
 Widget makeLoginPage() {
-  return LoginPage(makeLoginPresenter());
+  return LoginPage(makeGetxLoginPresenter());
 }
