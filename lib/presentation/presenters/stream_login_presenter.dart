@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 
-import '../../data/usecases/usecases.dart';
 import '../../domain/helpers/domain_error.dart';
 import '../../domain/usecases/usecases.dart';
 import '../../ui/pages/pages.dart';
@@ -28,7 +27,7 @@ class StreamLoginPresenter implements LoginPresenter {
       {@required this.authentication, @required this.validation});
 
   final Validation validation;
-  final RemoteAuthentication authentication;
+  final Authentication authentication;
   var _controller = StreamController<LoginState>.broadcast();
 
   var _state = LoginState();
