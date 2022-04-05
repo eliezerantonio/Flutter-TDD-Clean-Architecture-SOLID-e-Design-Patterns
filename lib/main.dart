@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_tdd_clean_architecture/factories/pages/login/login_page_factory.dart';
 import 'package:get/route_manager.dart';
 
+import '/factories/factories.dart';
 import 'ui/components/componets.dart';
-import 'ui/pages/pages.dart';
 
 void main() {
   runApp(App());
@@ -21,7 +20,7 @@ class App extends StatelessWidget {
       title: '4Dev',
       debugShowCheckedModeBanner: false,
       theme: makeAppATheme(),
-      home: LoginPage(null),
+      initialRoute: '/login',
       getPages: [
         GetPage(name: '/login', page: makeLoginPage),
       ],

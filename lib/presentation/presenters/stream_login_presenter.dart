@@ -46,7 +46,7 @@ class StreamLoginPresenter implements LoginPresenter {
       _controller?.stream?.map((state) => state.isFormValid)?.distinct();
 
   Stream<bool> get isLoadingStream =>
-      _controller?.stream?.map((state) => state.isLoading)?.distinct();
+      _controller?.stream?.map((state) => state?.isLoading)?.distinct();
 
   void _update() => _controller?.add(_state);
   
