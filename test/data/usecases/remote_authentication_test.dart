@@ -2,7 +2,7 @@ import 'package:faker/faker.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import 'package:flutter_tdd_clean_architecture/data/usecases/remote_authentication.dart';
+import 'package:flutter_tdd_clean_architecture/data/usecases/authentication/remote_authentication.dart';
 
 import 'package:flutter_tdd_clean_architecture/data/http/http.dart';
 
