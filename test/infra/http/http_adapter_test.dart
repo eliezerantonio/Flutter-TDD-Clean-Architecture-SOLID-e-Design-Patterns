@@ -1,6 +1,6 @@
 
 import 'package:faker/faker.dart';
-import 'package:flutter_tdd_clean_architecture/infra/http.dart';
+import 'package:flutter_tdd_clean_architecture/infra/http/http.dart';
 import 'package:http/http.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';

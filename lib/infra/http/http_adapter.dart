@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:meta/meta.dart';
 
-import '../../data/http/http.dart';
+import '../../../data/http/http.dart';
 
 class HttpAdapter implements HttpClient {
   final Client client;
