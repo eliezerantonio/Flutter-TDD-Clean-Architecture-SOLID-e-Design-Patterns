@@ -30,7 +30,7 @@ void main() {
     verify(secureStorage.write(key: key, value: value));
   });
 
-  test('Should throw if save secre throws', () async {
+  test('Should throw if save secure throws', () async {
     mockSaveSecureError();
     final future = sut.saveSecure(key: key, value: value);
 

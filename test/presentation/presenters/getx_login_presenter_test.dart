@@ -1,6 +1,7 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_tdd_clean_architecture/domain/entities/entities.dart';
 import 'package:flutter_tdd_clean_architecture/domain/helpers/domain_error.dart';
+import 'package:flutter_tdd_clean_architecture/domain/usecases/save_current_account.dart';
 import 'package:flutter_tdd_clean_architecture/domain/usecases/usecases.dart';
 import 'package:flutter_tdd_clean_architecture/presentation/presenters/presenters.dart';
 import 'package:flutter_tdd_clean_architecture/presentation/presenters/protocols/protocols.dart';
@@ -11,12 +12,16 @@ class ValidationSpy extends Mock implements Validation {}
 
 class AuthenticationSpy extends Mock implements Authentication {}
 
+class SaveCurrentAccountSpy extends Mock implements SaveCurrentAccount {}
+
 void main() {
   ValidationSpy validation;
   AuthenticationSpy authentication;
   GetxLoginPresenter sut;
+  SaveCurrentAccountSpy saveCurrentAccount;
   String email;
   String password;
+  String token;
 
   PostExpectation mockValidationCall(String field) => when(validation.validate(
       field: field == null ? anyNamed('field') : field,
@@ -29,8 +34,7 @@ void main() {
   }
 
   void mockAuthentication({String field, String value}) {
-    mockAuthenticationCall()
-        .thenAnswer((_) => AccountEntity(faker.guid.guid()));
+    mockAuthenticationCall().thenAnswer((_) => AccountEntity(token));
   }
 
   void mockAuthenticationError(DomainError error) {
@@ -40,11 +44,14 @@ void main() {
   setUp(() {
     validation = ValidationSpy();
     authentication = AuthenticationSpy();
+    saveCurrentAccount = SaveCurrentAccountSpy();
     sut = GetxLoginPresenter(
-        validation: validation, authentication: authentication);
+        validation: validation, authentication: authentication,saveCurrentAccount: saveCurrentAccount);
     email = faker.internet.email();
     password = faker.internet.password();
+    token = faker.guid.guid();
     mockValidation();
+    mockAuthentication();
   });
   test('Should call Validation with correct email', () {
     sut.validateEmail(email);
@@ -138,6 +145,14 @@ void main() {
     verify(authentication
             .auth(AuthenticationParams(email: email, secret: password)))
         .called(1);
+  });
+  test('Should call SaveCurrentAccount with correct value', () async {
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+
+    await sut.auth();
+
+    verify(saveCurrentAccount.save(AccountEntity(token))).called(1);
   });
   test('Should emit currect events on Authentication success', () async {
     sut.validateEmail(email);
