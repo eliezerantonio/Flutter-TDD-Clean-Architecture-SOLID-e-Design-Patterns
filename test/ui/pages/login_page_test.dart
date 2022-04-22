@@ -4,6 +4,7 @@ import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tdd_clean_architecture/ui/pages/pages.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get/get.dart';
 import 'package:mockito/mockito.dart';
 
 class LoginPresenterSpy extends Mock implements LoginPresenter {}
@@ -14,6 +15,7 @@ void main() {
   StreamController<String> emailErrorController;
   StreamController<String> passwordErrorController;
   StreamController<String> mainErrroController;
+  StreamController<String> navigateToController;
   StreamController<bool> isFormValidController;
   StreamController<bool> isLoadingController;
 
@@ -21,6 +23,7 @@ void main() {
     emailErrorController = new StreamController<String>();
     passwordErrorController = new StreamController<String>();
     mainErrroController = new StreamController<String>();
+    navigateToController = new StreamController<String>();
     isFormValidController = new StreamController<bool>();
     isLoadingController = new StreamController<bool>();
   }
@@ -33,6 +36,8 @@ void main() {
         .thenAnswer((_) => passwordErrorController.stream);
     when(presenter.mainErrorStream)
         .thenAnswer((_) => mainErrroController.stream);
+    when(presenter.navigateToStream)
+        .thenAnswer((_) => navigateToController.stream);
 
     when(presenter.isFormValidStream)
         .thenAnswer((_) => isFormValidController.stream);
@@ -47,6 +52,7 @@ void main() {
     mainErrroController.close();
     isFormValidController.close();
     isLoadingController.close();
+    navigateToController.close();
   }
 
   Future<void> loadPage(WidgetTester tester) async {
@@ -55,7 +61,14 @@ void main() {
     initStreams();
     mockStreams();
 
-    final loginPage = MaterialApp(home: LoginPage(presenter));
+    final loginPage = GetMaterialApp(
+      initialRoute: '/login',
+      getPages: [
+        GetPage(name: "/login", page:()=> LoginPage(presenter)),
+        GetPage(name: "/any_route", page:()=>Scaffold(body:Text("fake page"))),
+      ],
+      home: LoginPage(presenter),
+    );
     await tester.pumpWidget(loginPage);
   }
 
@@ -245,7 +258,8 @@ void main() {
     expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 
-  testWidgets('Should present erro message', (WidgetTester tester) async {
+  testWidgets('Should present error message if authentication fails',
+      (WidgetTester tester) async {
     await loadPage(tester);
 
     mainErrroController.add('main error');
@@ -254,11 +268,13 @@ void main() {
     expect(find.text('main error'), findsOneWidget);
   });
 
-  testWidgets('Should cloase streams on dispose', (WidgetTester tester) async {
+  testWidgets('Should Change page', (WidgetTester tester) async {
     await loadPage(tester);
 
-    addTearDown(() {
-      verify(presenter.dispose()).called(1);
-    });
+    mainErrroController.add('/any_route');
+    await tester.pumpAndSettle();
+
+    expect(Get.currentRoute, '/any_route');
+    expect(find.text('fake page'), findsOneWidget);
   });
 }
