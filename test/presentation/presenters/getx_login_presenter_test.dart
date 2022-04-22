@@ -34,7 +34,7 @@ void main() {
   }
 
   void mockAuthentication({String field, String value}) {
-    mockAuthenticationCall().thenAnswer((_) => AccountEntity(token));
+    mockAuthenticationCall().thenAnswer((_) async => AccountEntity(token));
   }
 
   void mockAuthenticationError(DomainError error) {
@@ -46,7 +46,9 @@ void main() {
     authentication = AuthenticationSpy();
     saveCurrentAccount = SaveCurrentAccountSpy();
     sut = GetxLoginPresenter(
-        validation: validation, authentication: authentication,saveCurrentAccount: saveCurrentAccount);
+        validation: validation,
+        authentication: authentication,
+        saveCurrentAccount: saveCurrentAccount);
     email = faker.internet.email();
     password = faker.internet.password();
     token = faker.guid.guid();
