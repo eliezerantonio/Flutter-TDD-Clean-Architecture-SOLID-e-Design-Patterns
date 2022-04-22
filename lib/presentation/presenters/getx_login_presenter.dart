@@ -8,14 +8,10 @@ import '../../ui/pages/pages.dart';
 import 'protocols/protocols.dart';
 
 class GetxLoginPresenter extends GetxController implements LoginPresenter {
-  GetxLoginPresenter(
-      {@required this.authentication,
-      @required this.validation,
-      @required this.saveCurrentAccount});
-
-  final Validation validation;
+   final Validation validation;
   final Authentication authentication;
   final SaveCurrentAccount saveCurrentAccount;
+
   String _email;
   String _password;
   var _emailError = RxString('');
@@ -26,31 +22,31 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
   var _isLoading = false.obs;
 
   Stream<String> get emailErrorStream => _emailError.stream;
-
   Stream<String> get passwordErrorStream => _passwordError.stream;
-
   Stream<String> get mainErrorStream => _mainError.stream;
-
   Stream<String> get navigateToStream => _navigateTo.stream;
-
   Stream<bool> get isFormValidStream => _isFormValid.stream;
-
   Stream<bool> get isLoadingStream => _isLoading.stream;
+
+  GetxLoginPresenter(
+      {@required this.validation,
+      @required this.authentication,
+      @required this.saveCurrentAccount});
 
   void validateEmail(String email) {
     _email = email;
     _emailError.value = validation.validate(field: 'email', value: email);
-    _validadeForm();
+    _validateForm();
   }
 
   void validatePassword(String password) {
     _password = password;
     _passwordError.value =
         validation.validate(field: 'password', value: password);
-    _validadeForm();
+    _validateForm();
   }
 
-  void _validadeForm() {
+  void _validateForm() {
     _isFormValid.value = _emailError.value == null &&
         _passwordError.value == null &&
         _email != null &&
@@ -63,12 +59,10 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
       final account = await authentication
           .auth(AuthenticationParams(email: _email, secret: _password));
       await saveCurrentAccount.save(account);
-      _navigateTo.value = "/surveys";
+      _navigateTo.value = '/surveys';
     } on DomainError catch (error) {
       _mainError.value = error.description;
       _isLoading.value = false;
     }
   }
-
-  void dispose() {}
 }
