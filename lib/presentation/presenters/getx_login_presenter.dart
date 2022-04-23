@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:get/state_manager.dart';
 
 import '../../domain/helpers/domain_error.dart';
-import '../../domain/usecases/save_current_account.dart';
 import '../../domain/usecases/usecases.dart';
 import '../../ui/pages/pages.dart';
 import 'protocols/protocols.dart';
