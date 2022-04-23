@@ -38,4 +38,12 @@ void main() {
       expect(future, throwsA(TypeMatcher<Exception>()));
     });
   });
+
+  group('fetchSecure', () {
+    test('Should call fetch secure with correct value', () async {
+      sut.fetchSecure(key: key);
+
+      verify(secureStorage.read(key: key));
+    });
+  });
 }

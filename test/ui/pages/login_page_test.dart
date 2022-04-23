@@ -10,11 +10,13 @@ import 'package:mockito/mockito.dart';
 class LoginPresenterSpy extends Mock implements LoginPresenter {}
 
 void main() {
-    LoginPresenter presenter;
+  LoginPresenter presenter;
+
   StreamController<String> emailErrorController;
   StreamController<String> passwordErrorController;
   StreamController<String> mainErrorController;
   StreamController<String> navigateToController;
+
   StreamController<bool> isFormValidController;
   StreamController<bool> isLoadingController;
 
@@ -23,23 +25,19 @@ void main() {
     passwordErrorController = StreamController<String>();
     mainErrorController = StreamController<String>();
     navigateToController = StreamController<String>();
+
     isFormValidController = StreamController<bool>();
     isLoadingController = StreamController<bool>();
   }
 
   void mockStreams() {
-    when(presenter.emailErrorStream)
-        .thenAnswer((_) => emailErrorController.stream);
-    when(presenter.passwordErrorStream)
-        .thenAnswer((_) => passwordErrorController.stream);
-    when(presenter.mainErrorStream)
-        .thenAnswer((_) => mainErrorController.stream);
-    when(presenter.navigateToStream)
-        .thenAnswer((_) => navigateToController.stream);
-    when(presenter.isFormValidStream)
-        .thenAnswer((_) => isFormValidController.stream);
-    when(presenter.isLoadingStream)
-        .thenAnswer((_) => isLoadingController.stream);
+    when(presenter.emailErrorStream).thenAnswer((_) => emailErrorController.stream);
+    when(presenter.passwordErrorStream).thenAnswer((_) => passwordErrorController.stream);
+    when(presenter.mainErrorStream).thenAnswer((_) => mainErrorController.stream);
+    when(presenter.navigateToStream).thenAnswer((_) => navigateToController.stream);
+    
+    when(presenter.isFormValidStream).thenAnswer((_) => isFormValidController.stream);
+    when(presenter.isLoadingStream).thenAnswer((_) => isLoadingController.stream);
   }
 
   void closeStreams() {
