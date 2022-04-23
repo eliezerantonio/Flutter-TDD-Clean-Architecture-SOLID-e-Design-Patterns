@@ -6,7 +6,7 @@ import '../../../domain/usecases/usecases.dart';
 import '../../cache/chache.dart';
 
 class LocalLoadCurrentAccount implements LoadCurrentAccount {
-  final FechSecureCacheStorage fechSecureCacheStorage;
+  final FetchSecureCacheStorage fechSecureCacheStorage;
 
   LocalLoadCurrentAccount({@required this.fechSecureCacheStorage});
   Future<AccountEntity> load() async {

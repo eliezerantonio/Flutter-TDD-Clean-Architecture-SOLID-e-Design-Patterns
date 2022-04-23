@@ -2,15 +2,13 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 import 'package:faker/faker.dart';
 
-
 import 'package:flutter_tdd_clean_architecture/data/cache/chache.dart';
 import 'package:flutter_tdd_clean_architecture/data/usecases/usecases.dart';
 import 'package:flutter_tdd_clean_architecture/domain/entities/entities.dart';
 import 'package:flutter_tdd_clean_architecture/domain/helpers/helpers.dart';
 
-
-class FechSecureCacheStorageSpy extends Mock implements FechSecureCacheStorage {
-}
+class FechSecureCacheStorageSpy extends Mock
+    implements FetchSecureCacheStorage {}
 
 void main() {
   LocalLoadCurrentAccount sut;
