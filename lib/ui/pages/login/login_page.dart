@@ -7,9 +7,9 @@ import '../pages.dart';
 import 'components/components.dart';
 
 class LoginPage extends StatelessWidget {
-  final LoginPresenter presenter;
+  const LoginPage(this.presenter);
 
-  LoginPage(this.presenter);
+  final LoginPresenter presenter;
 
   @override
   Widget build(BuildContext context) {
@@ -21,64 +21,70 @@ class LoginPage extends StatelessWidget {
     }
 
     return Scaffold(
-      body: Builder(
-        builder: (context) {
-          presenter.isLoadingStream.listen((isLoading) {
+      body: Builder(builder: (context) {
+        presenter.isLoadingStream.listen(
+          (isLoading) {
             if (isLoading) {
               showLoading(context);
             } else {
               hideLoading(context);
             }
-          });
+          },
+        );
 
-          presenter.mainErrorStream.listen((error) {
-            if (error != null) {
-              showErrorMessage(context, error);
-            }
-          });
+        presenter.mainErrorStream.listen((error) {
+          if (error != null) {
+            showErrorMessage(context, error);
+          }
+        });
 
-          presenter.navigateToStream.listen((page) {
-            if (page?.isNotEmpty == true) {
-              Get.offAllNamed(page);
-            }
-          });
+        presenter.navigateToStream.listen((page) {
+          if (page?.isNotEmpty == true) {
+            Get.offAllNamed(page);
+          }
+        });
 
-          return GestureDetector(
-            onTap: _hideKeyboard,
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  LoginHeader(),
-                  Headline1('Login'),
-                  Padding(
-                    padding: EdgeInsets.all(32),
+        return GestureDetector(
+          onTap: _hideKeyboard,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                LoginHeader(),
+                Headline1("Login"),
+                Padding(
+                    padding: const EdgeInsets.all(32),
                     child: Provider(
                       create: (_) => presenter,
                       child: Form(
                         child: Column(
-                          children: <Widget>[
+                          children: [
                             EmailInput(),
                             Padding(
-                              padding: EdgeInsets.only(top: 8, bottom: 32),
+                              padding:
+                                  const EdgeInsets.only(top: 8, bottom: 32),
                               child: PasswordInput(),
                             ),
                             LoginButton(),
-                            FlatButton.icon(
-                                onPressed: () {},
-                                icon: Icon(Icons.person),
-                                label: Text('Criar Conta'))
+                            TextButton.icon(
+                              onPressed: () {},
+                              icon: Icon(Icons.person,
+                                  color: Theme.of(context).primaryColor),
+                              label: Text(
+                                'Criar conta',
+                                style: TextStyle(
+                                    color: Theme.of(context).primaryColor),
+                              ),
+                            )
                           ],
                         ),
                       ),
-                    ),
-                  )
-                ],
-              ),
+                    )),
+              ],
             ),
-          );
-        },
-      ),
+          ),
+        );
+      }),
     );
   }
 }
