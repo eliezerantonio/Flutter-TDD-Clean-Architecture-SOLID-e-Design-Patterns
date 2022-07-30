@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
+
 import '../../domain/usecases/usecases.dart';
 import '../../ui/pages/pages.dart';
 

@@ -1,7 +1,7 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_tdd_clean_architecture/domain/entities/entities.dart';
-import 'package:flutter_tdd_clean_architecture/domain/usecases/load_current_account.dart';
-import 'package:flutter_tdd_clean_architecture/presentation/presenters/getx_splash_presenter.dart';
+import 'package:flutter_tdd_clean_architecture/domain/usecases/usecases.dart';
+import 'package:flutter_tdd_clean_architecture/presentation/presenters/presenters.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
@@ -21,14 +21,14 @@ void main() {
   }
 
   void mockLoadCurrentAccountError() {
-    mockLoadCurrentAccountCall().thenThrow(Exception);
+    mockLoadCurrentAccountCall().thenThrow(Exception());
   }
 
   setUp(() {
     loadCurrentAccount = LoadCurrentAccountSpy();
-    sut = GetxSplashPresenter(loadCurrentAccount: loadCurrentAccount);
     mockLoadCurrentAccount(account: AccountEntity(faker.guid.guid()));
-    mockLoadCurrentAccountError();
+    sut = GetxSplashPresenter(loadCurrentAccount: loadCurrentAccount);
+  
   });
   test('Should call LoadCurrentAccount', () async {
     await sut.checkAccount();
