@@ -1,6 +1,6 @@
 import '../../../main/builders/builders.dart';
 
-import '../../../presentation/presenters/protocols/protocols.dart';
+import '../../../validation/protocols/protocols.dart';
 import '../../../validation/protocols/protocols.dart';
 import '../../../validation/validators/validators.dart';
 

@@ -3,7 +3,7 @@ import 'package:flutter_tdd_clean_architecture/domain/entities/entities.dart';
 import 'package:flutter_tdd_clean_architecture/domain/helpers/domain_error.dart';
 import 'package:flutter_tdd_clean_architecture/domain/usecases/usecases.dart';
 import 'package:flutter_tdd_clean_architecture/presentation/presenters/presenters.dart';
-import 'package:flutter_tdd_clean_architecture/presentation/presenters/protocols/protocols.dart';
+import 'package:flutter_tdd_clean_architecture/validation/protocols/protocols.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 

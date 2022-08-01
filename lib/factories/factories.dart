@@ -1,3 +1,3 @@
 export './http/http.dart';
 export './pages/pages.dart';
-export './usecases/authentication/usecases.dart';
+export 'usecases/usecases.dart';

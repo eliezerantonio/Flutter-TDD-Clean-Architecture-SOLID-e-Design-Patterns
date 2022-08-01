@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 
 import '../protocols/field_validation.dart';
 
+
 class RequiredFieldValidation extends Equatable implements FieldValidation {
   final String field;
 

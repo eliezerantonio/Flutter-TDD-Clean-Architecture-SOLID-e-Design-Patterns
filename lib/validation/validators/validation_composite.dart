@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-import '../../presentation/presenters/protocols/protocols.dart';
+import '../protocols/protocols.dart';
 import '../protocols/protocols.dart';
 
 class ValidationComposite implements Validation {

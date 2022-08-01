@@ -4,7 +4,7 @@ import 'package:get/state_manager.dart';
 import '../../domain/helpers/domain_error.dart';
 import '../../domain/usecases/usecases.dart';
 import '../../ui/pages/pages.dart';
-import 'protocols/protocols.dart';
+import '../../validation/protocols/protocols.dart';
 
 class GetxLoginPresenter extends GetxController implements LoginPresenter {
   GetxLoginPresenter(
