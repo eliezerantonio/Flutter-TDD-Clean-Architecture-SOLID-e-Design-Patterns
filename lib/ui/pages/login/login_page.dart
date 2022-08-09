@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
+import '../../../utils/i18n/resources.dart';
 import '../../components/componets.dart';
 import '../pages.dart';
 import 'components/components.dart';
@@ -71,7 +72,7 @@ class LoginPage extends StatelessWidget {
                               icon: Icon(Icons.person,
                                   color: Theme.of(context).primaryColor),
                               label: Text(
-                                'Criar conta',
+                                R.strings.addAccount,
                                 style: TextStyle(
                                     color: Theme.of(context).primaryColor),
                               ),
