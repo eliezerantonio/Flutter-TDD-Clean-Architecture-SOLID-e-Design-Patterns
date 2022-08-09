@@ -10,8 +10,9 @@ class SplashPage extends StatelessWidget {
     presenter.checkAccount();
     return Scaffold(
       appBar: AppBar(
-        title: Text("4Dev"),
-      ),
+          title: Text("4Dev"),
+          centerTitle: true,
+          backgroundColor: Color.fromRGBO(136, 14, 79, 1)),
       body: Builder(builder: (context) {
         presenter.navigateToStream.listen((page) {
           //caso receba pagina nula
@@ -21,7 +22,9 @@ class SplashPage extends StatelessWidget {
           }
         });
 
-        return Center(child: CircularProgressIndicator());
+        return Center(
+            child: CircularProgressIndicator(
+                color: Color.fromRGBO(136, 14, 79, 1)));
       }),
     );
   }
