@@ -1,16 +1,18 @@
+import '../i18n/i18n.dart';
+
 enum UIError { unexpected, invalidCredentials, requiredField, invalidField }
 
 extension UIErrorExtension on UIError {
   String get description {
     switch (this) {
       case UIError.invalidCredentials:
-        return 'Crendenciais invalidos';
+        return R.strings.msgInvalidCredentials;
       case UIError.requiredField:
-        return 'Campo obrigatorio';
+        return R.strings.msgRequiredField;
       case UIError.invalidField:
-        return 'Campo invalido';
+        return R.strings.msgInvalidField;
       case UIError.unexpected:
-        return 'Deu errado, tente novamente';
+        return R.strings.msgUnexpectedField;
         break;
       default:
         return '';

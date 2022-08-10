@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 import '/factories/factories.dart';
 import 'ui/components/componets.dart';
-import 'utils/i18n/resources.dart';
+import 'ui/helpers/i18n/resources.dart';
 
 void main() {
   Provider.debugCheckInvalidValueType = null;
