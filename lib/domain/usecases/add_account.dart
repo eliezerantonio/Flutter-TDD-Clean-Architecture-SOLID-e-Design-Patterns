@@ -4,16 +4,16 @@ import 'package:meta/meta.dart';
 import '../entities/entities.dart';
 
 abstract class AddAccount {
-  Future<AccountEntity> add(AddAcountParams params);
+  Future<AccountEntity> add(AddAccountParams params);
 }
 
-class AddAcountParams extends Equatable {
+class AddAccountParams extends Equatable {
   final String name;
   final String email;
   final String password;
   final String passwordConfirmation;
 
-  AddAcountParams({@required this.email, @required this.password, this.passwordConfirmation, this.name});
+  AddAccountParams({@required this.email, @required this.password, this.passwordConfirmation, this.name});
 
   @override
   List<Object> get props => [name,email, password, passwordConfirmation];
