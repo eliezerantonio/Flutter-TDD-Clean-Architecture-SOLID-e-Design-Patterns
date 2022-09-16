@@ -36,11 +36,14 @@ void main() {
     httpClient = HttpClientSpy();
     url = faker.internet.httpUrl();
     sut = RemoteAddAccount(httpClient: httpClient, url: url);
+
     params = AddAccountParams(
         name: faker.person.name(),
         email: faker.internet.email(),
         password: faker.internet.password(),
         passwordConfirmation: faker.internet.password());
+
+    mockHttpData(mockValidData());
   });
 
   test('Should call HttpClient with currect Values', () async {
@@ -87,5 +90,12 @@ void main() {
     final future = sut.add(params);
 
     expect(future, throwsA(DomainError.emailInUse));
+  });
+  test('Should return an account if HttpClient returns 200', () async {
+    final validData = mockValidData();
+    mockHttpData(validData);
+    final account = await sut.add(params);
+
+    expect(account.token, throwsA(DomainError.emailInUse));
   });
 }
