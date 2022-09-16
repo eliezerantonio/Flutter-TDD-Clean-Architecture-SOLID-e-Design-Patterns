@@ -98,4 +98,14 @@ void main() {
 
     expect(account.token, throwsA(DomainError.emailInUse));
   });
+  test(
+      'Should throw UnexpectedError if HttpClient returns 200 with invalid data ',
+      () async {
+    mockHttpData(
+      {'invalid_key': 'invalid_value'},
+    );
+    final future = sut.add(params);
+
+    expect(future, throwsA(DomainError.unexpected));
+  });
 }
