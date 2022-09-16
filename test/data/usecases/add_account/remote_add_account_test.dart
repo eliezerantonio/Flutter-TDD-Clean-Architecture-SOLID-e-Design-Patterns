@@ -16,10 +16,9 @@ void main() {
   String url;
   AddAccountParams params;
 
-
-    Map mockValidData() =>
+  Map mockValidData() =>
       {'accessToken': faker.guid.guid(), 'name': faker.person.name()};
-      
+
   PostExpectation mockRequest() => when(httpClient.request(
       url: anyNamed('url'),
       method: anyNamed('method'),
@@ -44,7 +43,6 @@ void main() {
         passwordConfirmation: faker.internet.password());
   });
 
-  
   test('Should call HttpClient with currect Values', () async {
     await sut.add(params);
 
@@ -64,6 +62,14 @@ void main() {
 
   test('Should throw UnexpectedError if HttpClient returns 400', () {
     mockHttpError(HttpError.badRequest);
+    final future = sut.add(params);
+
+    expect(future, throwsA(DomainError.unexpected));
+  });
+
+  test('Should throw UnexpectedError if HttpClient returns', () {
+    mockHttpError(HttpError.notFound);
+
     final future = sut.add(params);
 
     expect(future, throwsA(DomainError.unexpected));
