@@ -14,7 +14,13 @@ class PtPt implements Translations {
   String get login => 'Login';
 
   @override
+  String get confirmPassword => 'Confirmar Senha';
+
+  @override
   String get password => 'Senha';
+
+  @override
+  String get name => 'Nome';
 
   @override
   String get msgRequiredField => 'Campo obrigatorio';

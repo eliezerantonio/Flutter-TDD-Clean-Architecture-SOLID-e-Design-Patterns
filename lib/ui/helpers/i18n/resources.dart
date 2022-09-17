@@ -3,15 +3,15 @@ import 'package:flutter/widgets.dart';
 import 'strings/strings.dart';
 
 class R {
-  static Translations strings = PtPt();
+  static Translations string = PtPt();
 
   static void load(Locale locale) {
     switch (locale.toString()) {
       case 'en_Us':
-        strings = EnUs();
+        string = EnUs();
         break;
       default:
-        strings = PtPt();
+        string = PtPt();
         break;
     }
   }

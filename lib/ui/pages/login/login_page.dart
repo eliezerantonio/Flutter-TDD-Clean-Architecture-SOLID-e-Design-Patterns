@@ -73,7 +73,7 @@ class LoginPage extends StatelessWidget {
                               icon: Icon(Icons.person,
                                   color: Theme.of(context).primaryColor),
                               label: Text(
-                                R.strings.addAccount,
+                                R.string.addAccount,
                                 style: TextStyle(
                                     color: Theme.of(context).primaryColor),
                               ),

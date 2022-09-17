@@ -6,13 +6,13 @@ extension UIErrorExtension on UIError {
   String get description {
     switch (this) {
       case UIError.invalidCredentials:
-        return R.strings.msgInvalidCredentials;
+        return R.string.msgInvalidCredentials;
       case UIError.requiredField:
-        return R.strings.msgRequiredField;
+        return R.string.msgRequiredField;
       case UIError.invalidField:
-        return R.strings.msgInvalidField;
+        return R.string.msgInvalidField;
       case UIError.unexpected:
-        return R.strings.msgUnexpectedField;
+        return R.string.msgUnexpectedField;
         break;
       default:
         return '';
