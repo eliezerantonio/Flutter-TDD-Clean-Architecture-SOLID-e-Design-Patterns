@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tdd_clean_architecture/ui/pages/pages.dart';
+import 'package:provider/provider.dart';
 
 import '../../../helpers/i18n/resources.dart';
+import '../../login/login_presenter.dart';
 
 class SignupButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: null,
-      child: Text(R.string.addAccount),
-    );
+   final presenter = Provider.of<SignUpPresenter>(context);
+    return StreamBuilder<bool>(
+        stream: presenter.isFormValidStream,
+        builder: (context, snapshot) {
+          return ElevatedButton(
+            onPressed: snapshot.data == true ? presenter.add : null,
+            child: Text(R.string.addAccount),
+          );
+        });
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tdd_clean_architecture/ui/helpers/errors/ui_error.dart';
 import 'package:provider/provider.dart';
 
+import '../../../helpers/i18n/resources.dart';
 import '../login_presenter.dart';
 
 class EmailInput extends StatelessWidget {
@@ -17,7 +18,7 @@ class EmailInput extends StatelessWidget {
           onChanged: presenter.validateEmail,
           decoration: InputDecoration(
             errorText: snapshot.hasData ? snapshot.data.description : null,
-            labelText: 'Email',
+            labelText: R.string.email,
             icon: Icon(Icons.email, color: Theme.of(context).primaryColorLight),
           ),
         );
