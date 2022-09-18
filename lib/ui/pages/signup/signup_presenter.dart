@@ -15,5 +15,5 @@ abstract class SignUpPresenter {
   void validatePassword(String password);
   void validatePasswordConfirmation(String passwordConfirmation);
 
-  void add();
+  void signUp();
 }
