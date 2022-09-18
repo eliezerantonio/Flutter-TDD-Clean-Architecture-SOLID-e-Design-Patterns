@@ -170,4 +170,20 @@ void main() {
     await tester.pump();
     expect(find.descendant(of: find.bySemanticsLabel('Senha'), matching: find.byType(Text)), findsWidgets);
   });
+
+  testWidgets('Should present error if Confirm Password Error',(WidgetTester tester) async {
+    await loadPage(tester);
+
+    passwordConfirmationErrorController.add(UIError.invalidField);
+    await tester.pump();
+    expect(find.text('Campo invalido'), findsOneWidget);
+
+    passwordConfirmationErrorController.add(UIError.requiredField);
+    await tester.pump();
+    expect(find.text('Campo obrigatorio'), findsOneWidget);
+
+    passwordConfirmationErrorController.add(null);
+    await tester.pump();
+    expect(find.descendant(of: find.bySemanticsLabel('Confirmar Senha'), matching: find.byType(Text)), findsWidgets);
+  });
 }
