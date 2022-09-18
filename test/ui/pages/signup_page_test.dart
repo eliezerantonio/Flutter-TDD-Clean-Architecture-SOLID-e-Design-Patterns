@@ -136,10 +136,7 @@ void main() {
 
     emailErrorController.add(null);
     await tester.pump();
-    expect(
-        find.descendant(
-            of: find.bySemanticsLabel('Email'), matching: find.byType(Text)),
-        findsWidgets);
+    expect(find.descendant(of: find.bySemanticsLabel('Email'), matching: find.byType(Text)),findsWidgets);
   });
 
   testWidgets('Should present error if name Error',
@@ -216,6 +213,7 @@ void main() {
     final button =tester.widget<ElevatedButton>(find.byType(ElevatedButton));
     expect(button.onPressed, isNotNull);
   });
+
   testWidgets('Should disabled button if form is invalid',(WidgetTester tester) async {
     await loadPage(tester);
 
@@ -227,4 +225,17 @@ void main() {
   });
 
 
+    testWidgets('Sould call SingUp on form submit', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    isFormValidController.add(true);
+    await tester.pump();
+    final button=find.byType(ElevatedButton);
+    await tester.ensureVisible(button);
+    await tester.tap(button);
+    await tester.pump();
+
+    verify(presenter.signUp()).called(1);
+
+    });
 }
