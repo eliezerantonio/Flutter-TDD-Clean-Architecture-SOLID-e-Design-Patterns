@@ -123,7 +123,7 @@ void main() {
   
   
   
-  testWidgets('Should present error if name',(WidgetTester tester) async {
+  testWidgets('Should present error if name Error',(WidgetTester tester) async {
     await loadPage(tester);
 
     nameErrorController.add(UIError.invalidField);
@@ -137,5 +137,37 @@ void main() {
     nameErrorController.add(null);
     await tester.pump();
     expect(find.descendant(of: find.bySemanticsLabel('Nome'), matching: find.byType(Text)), findsWidgets);
+  }); 
+  
+  testWidgets('Should present error if Password Error',(WidgetTester tester) async {
+    await loadPage(tester);
+
+    passwordErrorController.add(UIError.invalidField);
+    await tester.pump();
+    expect(find.text('Campo invalido'), findsOneWidget);
+
+    passwordErrorController.add(UIError.requiredField);
+    await tester.pump();
+    expect(find.text('Campo obrigatorio'), findsOneWidget);
+
+    passwordErrorController.add(null);
+    await tester.pump();
+    expect(find.descendant(of: find.bySemanticsLabel('Senha'), matching: find.byType(Text)), findsWidgets);
+  });
+  
+  testWidgets('Should present error if Password Error',(WidgetTester tester) async {
+    await loadPage(tester);
+
+    passwordErrorController.add(UIError.invalidField);
+    await tester.pump();
+    expect(find.text('Campo invalido'), findsOneWidget);
+
+    passwordErrorController.add(UIError.requiredField);
+    await tester.pump();
+    expect(find.text('Campo obrigatorio'), findsOneWidget);
+
+    passwordErrorController.add(null);
+    await tester.pump();
+    expect(find.descendant(of: find.bySemanticsLabel('Senha'), matching: find.byType(Text)), findsWidgets);
   });
 }
