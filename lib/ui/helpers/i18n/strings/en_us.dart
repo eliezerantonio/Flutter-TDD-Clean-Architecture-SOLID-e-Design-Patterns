@@ -19,6 +19,10 @@ class EnUs implements Translations {
   String get msgRequiredField => 'Required field';
   @override
   String get msgUnexpectedField => 'Unexpected error';
+
+   
+  @override
+  String get msgEmailInUse => 'Email in use';
   @override
   String get name => 'Name';
   @override

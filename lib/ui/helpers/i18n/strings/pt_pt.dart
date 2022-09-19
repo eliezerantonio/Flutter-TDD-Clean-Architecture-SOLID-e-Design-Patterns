@@ -33,4 +33,7 @@ class PtPt implements Translations {
 
   @override
   String get msgInvalidCredentials => 'Crendenciais invalidos';
+  
+  @override
+  String get msgEmailInUse => 'Email ja esta ser utilizado';
 }

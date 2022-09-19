@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tdd_clean_architecture/ui/pages/signup/signup_presenter.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/componets.dart';
+import '../../helpers/errors/ui_error.dart';
 import '../../helpers/i18n/resources.dart';
 import 'components/components.dart';
 
 class SignUpPage extends StatelessWidget {
   SignUpPage(this.presenter);
 
-  
   SignUpPresenter presenter;
   @override
   Widget build(BuildContext context) {
@@ -22,17 +23,21 @@ class SignUpPage extends StatelessWidget {
 
     return Scaffold(
       body: Builder(builder: (context) {
-      presenter.isLoadingStream.listen((isLoading) {
+        presenter.isLoadingStream.listen((isLoading) {
+          if (isLoading) {
+            showLoading(context);
+          } else {
+            hideLoading(context);
+          }
+        });
 
-        if(isLoading){
-          showLoading(context);
-        }else{
-          hideLoading(context);
-        }
-        
-      });
+        presenter.mainErrorStream.listen((error) {
+          if (error != null) {
+            showErrorMessage(context, error.description);
+          }
+        });
 
-
+     
         return GestureDetector(
           onTap: _hideKeyboard,
           child: SingleChildScrollView(
@@ -44,7 +49,7 @@ class SignUpPage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(32),
                   child: Provider(
-                    create:(_)=>presenter,
+                    create: (_) => presenter,
                     child: Form(
                       child: Column(
                         children: [
