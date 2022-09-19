@@ -15,6 +15,7 @@ void main() {
   String email;
   String name;
   String password;
+  String passwordConfirmation;
 
 
   PostExpectation mockValidationCall(String field) => when(validation.validate(
@@ -35,7 +36,10 @@ void main() {
 
         validation:validation
       );
+      name = faker.person.name();
       email = faker.internet.email();
+      password = faker.internet.password();
+      passwordConfirmation = faker.internet.password();
       mockValidation();
   });
 
@@ -72,8 +76,7 @@ void main() {
 
   test('Should emit  null if validation succeeds', () {
     sut.emailErrorStream.listen(expectAsync1((error) => expect(error, null)));
-    sut.isFormValidStream
-        .listen(expectAsync1((isValid) => expect(isValid, false)));
+    sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
 
     sut.validateEmail(email);
     sut.validateEmail(email);
@@ -141,6 +144,35 @@ void main() {
 
     sut.validatePassword(password);
     sut.validatePassword(password);
+  });
+
+  //passwordConfirmation
+
+  test('Should call validation with correct passwordConfirmation', () {
+    sut.validatePasswordConfirmation(passwordConfirmation);
+    verify(validation.validate(field: 'passwordConfirmation', value: passwordConfirmation)).called(1);
+  });
+
+  test('Should call validation with correct passwordConfirmation', () {
+    sut.validatePasswordConfirmation(passwordConfirmation);
+    verify(validation.validate(field: 'passwordConfirmation', value: passwordConfirmation)).called(1);
+  });
+
+  test('Should emit passwordConfirmation error if validation fails ', () {
+    mockValidation(value: ValidationError.requiredField);
+
+    sut.passwordConfirmationErrorStream.listen(expectAsync1((error) => expect(error, UIError.requiredField)));
+    sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut.validatePasswordConfirmation(passwordConfirmation);
+    sut.validatePasswordConfirmation(passwordConfirmation);
+  });
+  test('Should emit passwordConfirmation error if validation fails ', () {
+    sut.passwordConfirmationErrorStream.listen(expectAsync1((error) => expect(error, null)));
+    sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut.validatePasswordConfirmation(passwordConfirmation);
+    sut.validatePasswordConfirmation(passwordConfirmation);
   });
 
 }
