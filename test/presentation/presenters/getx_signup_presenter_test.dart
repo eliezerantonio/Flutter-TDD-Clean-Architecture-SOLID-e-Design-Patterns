@@ -14,6 +14,7 @@ void main() {
   GetxSignUpPresenter sut;
   String email;
   String name;
+  String password;
 
 
   PostExpectation mockValidationCall(String field) => when(validation.validate(
@@ -61,7 +62,7 @@ void main() {
     mockValidation(value: ValidationError.requiredField);
 
     sut.emailErrorStream.listen(expectAsync1((error) => expect(error, UIError.requiredField)));
-    
+
     sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
 
     sut.validateEmail(email);
@@ -113,6 +114,33 @@ void main() {
 
     sut.validateName(name);
     sut.validateName(name);
+  });
+//password
+
+  test('Should call validation with correct password', () {
+    sut.validatePassword(password);
+    verify(validation.validate(field: 'password', value: password)).called(1);
+  });
+  test('Should call validation with correct password', () {
+    sut.validatePassword(password);
+    verify(validation.validate(field: 'password', value: password)).called(1);
+  });
+
+  test('Should emit password error if validation fails ', () {
+    mockValidation(value: ValidationError.requiredField);
+
+    sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, UIError.requiredField)));
+    sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut.validatePassword(password);
+    sut.validatePassword(password);
+  });
+  test('Should emit password error if validation fails ', () {
+    sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, null)));
+    sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut.validatePassword(password);
+    sut.validatePassword(password);
   });
 
 }
