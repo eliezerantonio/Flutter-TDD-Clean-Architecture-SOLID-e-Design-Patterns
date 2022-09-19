@@ -37,7 +37,11 @@ class SignUpPage extends StatelessWidget {
           }
         });
 
-     
+        presenter.navigateToStream.listen((page) {
+          if (page?.isNotEmpty == true) {
+            Get.offAllNamed(page);
+          }
+        });
         return GestureDetector(
           onTap: _hideKeyboard,
           child: SingleChildScrollView(
