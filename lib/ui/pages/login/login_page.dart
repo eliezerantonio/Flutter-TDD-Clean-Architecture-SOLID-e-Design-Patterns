@@ -24,13 +24,17 @@ class LoginPage extends StatelessWidget {
 
     return Scaffold(
       body: Builder(builder: (context) {
-        presenter.isLoadingStream.listen(
-          (isLoading) {
+        presenter.isLoadingStream.listen((isLoading) {
+
+
             if (isLoading) {
               showLoading(context);
             } else {
               hideLoading(context);
             }
+
+
+            
           },
         );
 

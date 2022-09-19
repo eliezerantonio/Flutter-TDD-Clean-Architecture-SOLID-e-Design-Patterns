@@ -17,6 +17,7 @@ void main() {
   StreamController<UIError> passwordErrorController;
   StreamController<UIError> passwordConfirmationErrorController;
   StreamController<bool> isFormValidController;
+  StreamController<bool> isLoadingController;
 
   void initStreams() {
     nameErrorController = new StreamController<UIError>();
@@ -24,6 +25,7 @@ void main() {
     passwordErrorController = new StreamController<UIError>();
     passwordConfirmationErrorController = new StreamController<UIError>();
     isFormValidController=new StreamController<bool>();
+    isLoadingController= new StreamController<bool>();
   }
 
   void mockStreams() {
@@ -36,6 +38,8 @@ void main() {
     when(presenter.passwordConfirmationErrorStream) .thenAnswer((_) => passwordConfirmationErrorController.stream);
     
     when(presenter.isFormValidStream) .thenAnswer((_) => isFormValidController.stream);
+
+    when(presenter.isLoadingStream) .thenAnswer((_) => isLoadingController.stream);
   }
 
   void closeStreams() {
@@ -43,6 +47,8 @@ void main() {
     emailErrorController.close();
     passwordErrorController.close();
     passwordConfirmationErrorController.close();
+    isFormValidController.close();
+    isLoadingController.close();
   }
 
   Future<void> loadPage(WidgetTester tester) async {
@@ -62,48 +68,34 @@ void main() {
     closeStreams();
   });
 
-  testWidgets('Should load with correct initial state',
-      (WidgetTester tester) async {
+  testWidgets('Should load with correct initial state',(WidgetTester tester) async {
     await loadPage(tester);
 
     //name
-    final nameTextChildren = find.descendant(
-        of: find.bySemanticsLabel('Nome'), matching: find.byType(Text));
-    expect(nameTextChildren, findsOneWidget,
-        reason:
-            'when a TextFormField has only one text child, means it has no errors, since one of the childs is always the label text');
+    final nameTextChildren = find.descendant(of: find.bySemanticsLabel('Nome'), matching: find.byType(Text));
+    expect(nameTextChildren, findsOneWidget,reason:'when a TextFormField has only one text child, means it has no errors, since one of the childs is always the label text');
 
     //email
 
-    final emailTextChildren = find.descendant(
-        of: find.bySemanticsLabel('Email'), matching: find.byType(Text));
-    expect(emailTextChildren, findsOneWidget,
-        reason:
-            'when a TextFormField has only one text child, means it has no errors, since one of the childs is always the label text');
+    final emailTextChildren = find.descendant(of: find.bySemanticsLabel('Email'), matching: find.byType(Text));
+    expect(emailTextChildren, findsOneWidget,reason:'when a TextFormField has only one text child, means it has no errors, since one of the childs is always the label text');
 
 // password
-    final passwordTextChildren = find.descendant(
-        of: find.bySemanticsLabel('Senha'), matching: find.byType(Text));
-    expect(passwordTextChildren, findsOneWidget,
-        reason:
-            'when a TextFormField has only one text child, means it has no errors, since one of the childs is always the label text');
+    final passwordTextChildren = find.descendant(of: find.bySemanticsLabel('Senha'), matching: find.byType(Text));
+    expect(passwordTextChildren, findsOneWidget, reason:'when a TextFormField has only one text child, means it has no errors, since one of the childs is always the label text');
 
 //confirmation password
 
-    final passwordConfirmationTextChildren = find.descendant(
-        of: find.bySemanticsLabel('Confirmar Senha'),
-        matching: find.byType(Text));
-    expect(passwordConfirmationTextChildren, findsOneWidget,
-        reason:
-            'when a TextFormField has only one text child, means it has no errors, since one of the childs is always the label text');
+    final passwordConfirmationTextChildren = find.descendant(of: find.bySemanticsLabel('Confirmar Senha'),matching: find.byType(Text));
+
+    expect(passwordConfirmationTextChildren, findsOneWidget,reason: 'when a TextFormField has only one text child, means it has no errors, since one of the childs is always the label text');
 
     final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
     expect(button.onPressed, null);
     expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 
-  testWidgets('Should call validate with correct values',
-      (WidgetTester tester) async {
+  testWidgets('Should call validate with correct values', (WidgetTester tester) async {
     await loadPage(tester);
 
     final name = faker.person.name();
@@ -122,8 +114,7 @@ void main() {
     verify(presenter.validatePasswordConfirmation(password));
   });
 
-  testWidgets('Should present error if email Error',
-      (WidgetTester tester) async {
+  testWidgets('Should present error if email Error',(WidgetTester tester) async {
     await loadPage(tester);
 
     emailErrorController.add(UIError.invalidField);
@@ -139,8 +130,7 @@ void main() {
     expect(find.descendant(of: find.bySemanticsLabel('Email'), matching: find.byType(Text)),findsWidgets);
   });
 
-  testWidgets('Should present error if name Error',
-      (WidgetTester tester) async {
+  testWidgets('Should present error if name Error',(WidgetTester tester) async {
     await loadPage(tester);
 
     nameErrorController.add(UIError.invalidField);
@@ -185,7 +175,7 @@ void main() {
 
     passwordErrorController.add(null);
     await tester.pump();
-    expect(find.descendant( of: find.bySemanticsLabel('Senha'), matching: find.byType(Text)),findsWidgets);
+    expect(find.descendant(of: find.bySemanticsLabel('Senha'), matching: find.byType(Text)),findsWidgets);
   });
 
   testWidgets('Should present error if Confirm Password Error',(WidgetTester tester) async {
@@ -204,25 +194,25 @@ void main() {
     expect(find.descendant(of: find.bySemanticsLabel('Confirmar Senha'), matching: find.byType(Text)),findsWidgets);
   });
 
-  testWidgets('Should enable button if form is valid',(WidgetTester tester) async {
-    await loadPage(tester);
+    testWidgets('Should enable button if form is valid',(WidgetTester tester) async {
+      await loadPage(tester);
 
-    isFormValidController.add(true);
-    await tester.pump();
+      isFormValidController.add(true);
+      await tester.pump();
 
-    final button =tester.widget<ElevatedButton>(find.byType(ElevatedButton));
-    expect(button.onPressed, isNotNull);
-  });
+      final button =tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+      expect(button.onPressed, isNotNull);
+    });
 
-  testWidgets('Should disabled button if form is invalid',(WidgetTester tester) async {
-    await loadPage(tester);
+    testWidgets('Should disabled button if form is invalid',(WidgetTester tester) async {
+      await loadPage(tester);
 
-    isFormValidController.add(false);
-    await tester.pump();
+      isFormValidController.add(false);
+      await tester.pump();
 
-    final button =tester.widget<ElevatedButton>(find.byType(ElevatedButton));
-    expect(button.onPressed, null);
-  });
+      final button =tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+      expect(button.onPressed, null);
+    });
 
 
     testWidgets('Sould call SingUp on form submit', (WidgetTester tester) async {
@@ -238,4 +228,24 @@ void main() {
     verify(presenter.signUp()).called(1);
 
     });
+
+    testWidgets('Should presenter loading', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    isLoadingController.add(true);
+    await tester.pump();
+
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+  });
+
+  testWidgets('Should hide loading', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    isLoadingController.add(true);
+    await tester.pump();
+    isLoadingController.add(false);
+    await tester.pump();
+
+    expect(find.byType(CircularProgressIndicator), findsNothing);
+  });
 }
