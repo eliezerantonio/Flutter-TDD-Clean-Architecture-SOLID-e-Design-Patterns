@@ -1,10 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/state_manager.dart';
 
-import '../../domain/helpers/helpers.dart';
 import '../../ui/helpers/errors/errors.dart';
-import '../../domain/usecases/usecases.dart';
-import '../../ui/pages/pages.dart';
 import '../protocols/protocols.dart';
 
 class GetxSignUpPresenter extends GetxController  {
@@ -16,6 +13,7 @@ class GetxSignUpPresenter extends GetxController  {
   String _name;
   String _password;
   String _passwordConfirmation;
+  
   var _emailError = Rx<UIError>(null);
   var _nameError = Rx<UIError>(null);
   var _passwordError = Rx<UIError>(null);
@@ -58,19 +56,28 @@ class GetxSignUpPresenter extends GetxController  {
     final error = validation.validate(field: field, value: value);
 
     switch (error) {
+
       case ValidationError.invalidField:
         return UIError.invalidField;
       case ValidationError.requiredField:
         return UIError.requiredField;
-
-        break;
       default:
         return null;
     }
+
   }
 
   void _validadeForm() {
-    _isFormValid.value = false;
+
+    _isFormValid.value = _emailError.value == null 
+    && _passwordError.value == null 
+    && _passwordConfirmationError.value == null
+    && _nameError.value == null 
+    && _email != null 
+    && _name != null 
+    && _password != null
+    && _passwordConfirmation != null;
+
   }
 
 
