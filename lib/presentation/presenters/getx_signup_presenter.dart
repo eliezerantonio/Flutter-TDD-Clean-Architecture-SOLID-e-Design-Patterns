@@ -6,10 +6,11 @@ import '../../ui/helpers/errors/errors.dart';
 import '../protocols/protocols.dart';
 
 class GetxSignUpPresenter extends GetxController  {
-  GetxSignUpPresenter({@required this.validation,this.addAccount });
+  GetxSignUpPresenter({@required this.validation,this.addAccount, this.saveCurrentAccount});
 
   final Validation validation;
   final AddAccount addAccount;
+  final SaveCurrentAccount saveCurrentAccount;
  
   String _email;
   String _name;
@@ -83,8 +84,8 @@ class GetxSignUpPresenter extends GetxController  {
       }
 
       Future<void> signUp()async{
-        await addAccount.add(AddAccountParams(name:_name, email: _email, password: _password, passwordConfirmation: _passwordConfirmation));
-
+        final account =await addAccount.add(AddAccountParams(name:_name, email: _email, password: _password, passwordConfirmation: _passwordConfirmation));
+         await saveCurrentAccount.save(account);
       }
 
 }

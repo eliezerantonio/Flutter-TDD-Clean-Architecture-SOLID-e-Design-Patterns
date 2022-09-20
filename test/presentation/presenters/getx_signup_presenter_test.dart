@@ -10,11 +10,13 @@ import 'package:mockito/mockito.dart';
 class ValidationSpy extends Mock implements Validation {}
 
 class AddAccountSpy extends Mock implements AddAccount {}
+class SaveCurrentAccountSpy extends Mock implements SaveCurrentAccount {}
 
 void main() {
   ValidationSpy validation;
    AddAccountSpy addAccount;
   GetxSignUpPresenter sut;
+  SaveCurrentAccountSpy saveCurrentAccount;
   String email;
   String name;
   String password;
@@ -37,7 +39,8 @@ void main() {
   setUp(() {
     validation = ValidationSpy();
     addAccount=AddAccountSpy();
-    sut = GetxSignUpPresenter(validation: validation,addAccount:addAccount);
+    saveCurrentAccount=SaveCurrentAccountSpy();
+    sut = GetxSignUpPresenter(validation: validation,addAccount:addAccount,saveCurrentAccount:saveCurrentAccount);
     name = faker.person.name();
     email = faker.internet.email();
     password = faker.internet.password();
@@ -201,6 +204,13 @@ void main() {
     await sut.signUp();
 
     verify(addAccount.add(AddAccountParams(name:name,email: email, password: password,passwordConfirmation:passwordConfirmation))).called(1);
+  });
+
+  test("Should call SaveCurrentAccount with corret value",()async{
+
+  await sut.signUp();
+  verify(saveCurrentAccount.save(AccountEntity(token))).called(1);
+
   });
 
 }
