@@ -31,11 +31,11 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
 
   Stream<UIError> get mainErrorStream => _mainError.stream;
 
+  Stream<bool> get isLoadingStream => _isLoading.stream;
   Stream<String> get navigateToStream => _navigateTo.stream;
 
   Stream<bool> get isFormValidStream => _isFormValid.stream;
 
-  Stream<bool> get isLoadingStream => _isLoading.stream;
 
   void validateEmail(String email) {
     _email = email;
