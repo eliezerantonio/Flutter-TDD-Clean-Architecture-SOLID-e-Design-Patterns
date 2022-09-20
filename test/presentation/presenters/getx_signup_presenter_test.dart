@@ -19,6 +19,7 @@ void main() {
   String name;
   String password;
   String passwordConfirmation;
+  String token;
 
   PostExpectation mockValidationCall(String field) => when(validation.validate(
       field: field == null ? anyNamed('field') : field,
@@ -30,17 +31,20 @@ void main() {
   PostExpectation  mockAddAccountCall()=> when(addAccount.add(any));
 
   void mockAddAccount(){
-    mockAddAccountCall().thenAnswer((_)async=>AccountEntity(any));
+    mockAddAccountCall().thenAnswer((_)async=>AccountEntity(token));
   }
 
   setUp(() {
     validation = ValidationSpy();
-    sut = GetxSignUpPresenter(validation: validation);
+    addAccount=AddAccountSpy();
+    sut = GetxSignUpPresenter(validation: validation,addAccount:addAccount);
     name = faker.person.name();
     email = faker.internet.email();
     password = faker.internet.password();
     passwordConfirmation = faker.internet.password();
+    token=faker.guid.guid();
     mockValidation();
+    mockAddAccount();
   });
 
 //email
@@ -196,7 +200,7 @@ void main() {
 
     await sut.signUp();
 
-    verify(addAccount.add(AddAccountParams(email: email, password: password))).called(1);
+    verify(addAccount.add(AddAccountParams(name:name,email: email, password: password,passwordConfirmation:passwordConfirmation))).called(1);
   });
 
 }
