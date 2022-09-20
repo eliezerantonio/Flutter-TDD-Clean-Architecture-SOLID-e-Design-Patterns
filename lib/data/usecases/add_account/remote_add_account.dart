@@ -16,8 +16,7 @@ class RemoteAddAccount implements AddAccount {
     final body = RemoteAddAccountParams.fromDomain(params).toJson();
 
     try {
-      final httpResponse =
-          await httpClient.request(url: url, method: 'post', body: body);
+      final httpResponse = await httpClient.request(url: url, method: 'post', body: body);
 
       return RemoteAccountModel.fromJson(httpResponse).toEntity();
     } on HttpError catch (error) {
@@ -42,7 +41,7 @@ class RemoteAddAccountParams {
   });
 
   factory RemoteAddAccountParams.fromDomain(AddAccountParams params) =>
-      RemoteAddAccountParams(
+  RemoteAddAccountParams(
         name: params.name,
         email: params.email,
         password: params.password,

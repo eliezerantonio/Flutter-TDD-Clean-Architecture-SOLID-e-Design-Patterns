@@ -1,19 +1,21 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter_tdd_clean_architecture/domain/usecases/usecases.dart';
 import 'package:get/state_manager.dart';
 
 import '../../ui/helpers/errors/errors.dart';
 import '../protocols/protocols.dart';
 
 class GetxSignUpPresenter extends GetxController  {
-  GetxSignUpPresenter({@required this.validation, });
+  GetxSignUpPresenter({@required this.validation,this.addAccount });
 
   final Validation validation;
+  final AddAccount addAccount;
  
   String _email;
   String _name;
   String _password;
   String _passwordConfirmation;
-  
+
   var _emailError = Rx<UIError>(null);
   var _nameError = Rx<UIError>(null);
   var _passwordError = Rx<UIError>(null);
@@ -67,19 +69,22 @@ class GetxSignUpPresenter extends GetxController  {
 
   }
 
-  void _validadeForm() {
+      void _validadeForm() {
 
-    _isFormValid.value = _emailError.value == null 
-    && _passwordError.value == null 
-    && _passwordConfirmationError.value == null
-    && _nameError.value == null 
-    && _email != null 
-    && _name != null 
-    && _password != null
-    && _passwordConfirmation != null;
+        _isFormValid.value = _emailError.value == null 
+        && _passwordError.value == null 
+        && _passwordConfirmationError.value == null
+        && _nameError.value == null 
+        && _email != null 
+        && _name != null 
+        && _password != null
+        && _passwordConfirmation != null;
 
-  }
+      }
 
+      Future<void> signUp()async{
+        await addAccount.add(AddAccountParams(name:_name, email: _email, password: _password, passwordConfirmation: _passwordConfirmation));
 
+      }
 
 }

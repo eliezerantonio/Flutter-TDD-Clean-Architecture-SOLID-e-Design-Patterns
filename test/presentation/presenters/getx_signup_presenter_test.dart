@@ -1,4 +1,6 @@
 import 'package:faker/faker.dart';
+import 'package:flutter_tdd_clean_architecture/domain/entities/entities.dart';
+import 'package:flutter_tdd_clean_architecture/domain/usecases/usecases.dart';
 import 'package:flutter_tdd_clean_architecture/ui/helpers/errors/ui_error.dart';
 import 'package:flutter_tdd_clean_architecture/presentation/presenters/presenters.dart';
 import 'package:flutter_tdd_clean_architecture/presentation/protocols/protocols.dart';
@@ -7,8 +9,11 @@ import 'package:mockito/mockito.dart';
 
 class ValidationSpy extends Mock implements Validation {}
 
+class AddAccountSpy extends Mock implements AddAccount {}
+
 void main() {
   ValidationSpy validation;
+   AddAccountSpy addAccount;
   GetxSignUpPresenter sut;
   String email;
   String name;
@@ -21,6 +26,11 @@ void main() {
 
   void mockValidation({String field, ValidationError value}) {
     mockValidationCall(field).thenReturn(value);
+  }
+  PostExpectation  mockAddAccountCall()=> when(addAccount.add(any));
+
+  void mockAddAccount(){
+    mockAddAccountCall().thenAnswer((_)async=>AccountEntity(any));
   }
 
   setUp(() {
@@ -175,5 +185,18 @@ void main() {
     await Future.delayed(Duration.zero);
     sut.validatePassword(password);
     await Future.delayed(Duration.zero);
+
   });
+
+  test('Should call AddAccount with correct values ', () async {
+    sut.validateEmail(email);
+    sut.validateName(name);
+    sut.validatePassword(password);
+    sut.validatePasswordConfirmation(passwordConfirmation);
+
+    await sut.signUp();
+
+    verify(addAccount.add(AddAccountParams(email: email, password: password))).called(1);
+  });
+
 }
