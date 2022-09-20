@@ -23,9 +23,7 @@ void main() {
   String password;
   String token;
 
-  PostExpectation mockValidationCall(String field) => when(validation.validate(
-      field: field == null ? anyNamed('field') : field,
-      value: anyNamed('value')));
+  PostExpectation mockValidationCall(String field) => when(validation.validate(field: field == null ? anyNamed('field') : field,value: anyNamed('value')));
 
   PostExpectation mockAuthenticationCall() => when(authentication.auth(any));
 
@@ -41,8 +39,7 @@ void main() {
     mockAuthenticationCall().thenThrow(error);
   }
 
-  PostExpectation mockSaveCurrentAccounCall() =>
-      when(saveCurrentAccount.save(any));
+  PostExpectation mockSaveCurrentAccounCall() =>when(saveCurrentAccount.save(any));
 
   void mockSaveCurrentAccountError() {
     mockSaveCurrentAccounCall().thenThrow(DomainError.unexpected);
@@ -178,8 +175,7 @@ void main() {
   test('Should change page on success', () async {
     sut.validateEmail(email);
     sut.validatePassword(password);
-    sut.navigateToStream
-        .listen(expectAsync1((page) => expect(page, '/surveys')));
+    sut.navigateToStream.listen(expectAsync1((page) => expect(page, '/surveys')));
     await sut.auth();
   });
 

@@ -98,7 +98,7 @@ class GetxSignUpPresenter extends GetxController {
         
     await saveCurrentAccount.save(account);
 
-    _isLoading.value=false;
+ _navigateTo.value = "/surveys";
    }on DomainError catch (error) {
 
     switch(error){
