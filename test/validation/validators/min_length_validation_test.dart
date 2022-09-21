@@ -1,9 +1,11 @@
 import 'package:flutter_tdd_clean_architecture/presentation/protocols/validation.dart';
 import 'package:flutter_tdd_clean_architecture/validation/protocols/field_validation.dart';
 import 'package:test/test.dart';
+import 'package:meta/meta.dart';
+import 'package:faker/faker.dart';
 
 class MinLengthValidation implements FieldValidation {
-  MinLengthValidation({this.field, this.size});
+  MinLengthValidation({@required this.field,@required  this.size});
   final String field;
   final int size;
 
@@ -31,5 +33,11 @@ void main() {
     
 
     expect(sut.validate(null), ValidationError.invalidField);
+  }); 
+  
+  test('Should return error if value is less then size', () {
+    
+
+    expect(sut.validate(faker.randomGenerator.string(5,min:1)), ValidationError.invalidField);
   });
 }
