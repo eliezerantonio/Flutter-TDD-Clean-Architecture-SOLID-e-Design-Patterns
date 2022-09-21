@@ -3,6 +3,7 @@ import 'package:flutter_tdd_clean_architecture/validation/validators/validators.
 import '../../validation/protocols/field_validation.dart';
 
 class ValidationBuilder {
+  
   static ValidationBuilder _instance;
   String fieldName;
   List<FieldValidation> validations = [];
@@ -27,10 +28,11 @@ class ValidationBuilder {
     return this;
   }
 
-    ValidationBuilder sameAs(String fieldToCompare) {
+  ValidationBuilder sameAs(String fieldToCompare) {
     validations.add(CompareFieldsValidation(field: fieldName, fieldToCompare: fieldToCompare));
     return this;
   }
+
   ValidationBuilder min(int size) {
     validations.add(MinLengthValidation(field:fieldName, size:size));
 

@@ -4,7 +4,4 @@ import '../../../domain/usecases/usecases.dart';
 import '../cache/cache.dart';
 
 
-LoadCurrentAccount makeLocalLoadCurrentAccount() {
-  return LocalLoadCurrentAccount(
-      fechSecureCacheStorage: makeLocalStorageAdapter());
-}
+LoadCurrentAccount makeLocalLoadCurrentAccount() => LocalLoadCurrentAccount(fechSecureCacheStorage: makeLocalStorageAdapter());
