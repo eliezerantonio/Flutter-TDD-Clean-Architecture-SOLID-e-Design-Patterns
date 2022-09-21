@@ -73,7 +73,7 @@ class LoginPage extends StatelessWidget {
                             ),
                             LoginButton(),
                             TextButton.icon(
-                              onPressed: () {},
+                              onPressed: presenter.goToSignUp,
                               icon: Icon(Icons.person,
                                   color: Theme.of(context).primaryColor),
                               label: Text(

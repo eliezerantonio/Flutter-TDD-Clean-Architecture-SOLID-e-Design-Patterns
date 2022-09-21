@@ -275,7 +275,7 @@ void main() {
 
 test('Should emit currect event on UnexpectedError', () async {
     mockAuthenticationError(DomainError.unexpected);
-    
+
     sut.validateEmail(email);
     sut.validateName(name);
     sut.validatePassword(password);
@@ -286,4 +286,7 @@ test('Should emit currect event on UnexpectedError', () async {
     await sut.signUp();
   });
 }
+
+
+
 

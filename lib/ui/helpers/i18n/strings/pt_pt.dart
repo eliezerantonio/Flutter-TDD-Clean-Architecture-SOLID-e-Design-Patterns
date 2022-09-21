@@ -2,7 +2,7 @@ import 'translations.dart';
 
 class PtPt implements Translations {
   @override
-  String get addAccount => 'Criar conta';
+  String get addAccount => 'Criar Conta';
 
   @override
   String get email => 'Email';

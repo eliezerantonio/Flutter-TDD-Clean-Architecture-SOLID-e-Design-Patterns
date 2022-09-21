@@ -92,4 +92,9 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
   }
 
   void dispose() {}
+  
+  @override
+  void goToSignUp() {
+      _navigateTo.value = "/signup";
+  }
 }
