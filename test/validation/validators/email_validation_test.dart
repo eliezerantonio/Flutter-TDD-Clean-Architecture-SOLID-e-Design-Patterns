@@ -12,6 +12,9 @@ void main() {
   test('Should return null if email is empty', () {
     expect(sut.validate({'any_field':''}), null);
   });
+   test('Should return null on invalid case', () {
+    expect(sut.validate({}), null);
+  });
   test('Should return null if email is null', () {
     expect(sut.validate({'any_field':null}), null);
   });

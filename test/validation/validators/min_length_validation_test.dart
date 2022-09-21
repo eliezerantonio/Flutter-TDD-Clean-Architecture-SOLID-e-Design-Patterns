@@ -20,6 +20,8 @@ void main() {
 
     expect(sut.validate({'any_field':''}), ValidationError.invalidField);
   });
+
+  
   test('Should return error if value is null', () {
     
 
