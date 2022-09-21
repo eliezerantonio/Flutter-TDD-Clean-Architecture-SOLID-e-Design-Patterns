@@ -2,18 +2,18 @@ import '../../presentation/protocols/protocols.dart';
 
 class CompareFieldValidation implements FieldValidation {
 
-  CompareFieldValidation({this.field, this.valueToCompare});
+  CompareFieldValidation({this.field, this.fieldToCompare});
 
 
   @override
   String field ; 
 
-  String valueToCompare ; 
+  String fieldToCompare ; 
 
   @override
-  ValidationError validate(String value,) {
+  ValidationError validate(Map input,) {
 
-   return  value.contains(valueToCompare) ? null: ValidationError.invalidField;
+   return  input[field].contains(input[fieldToCompare]) ? null: ValidationError.invalidField;
 
   }
 

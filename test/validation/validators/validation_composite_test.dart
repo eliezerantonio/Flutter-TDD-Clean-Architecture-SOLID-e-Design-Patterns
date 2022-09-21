@@ -41,13 +41,13 @@ void main() {
     sut = ValidationComposite([validation1, validation2, validation3]);
   });
   test('Should return null if all validation return null or empty', () {
-    final error = sut.validate(field: 'any_field', value: 'any_value');
+    final error = sut.validate(field: 'any_field', input: {'any_field':'any_value'});
     expect(error, null);
   });
   test('Should return null if all validation return empty', () {
   
 
-    final error = sut.validate(field: 'any_field', value: 'any_value');
+    final error = sut.validate(field: 'any_field', input: {'any_field':'any_value'});
     expect(error, null);
   });
   test('Should return first error', () {
@@ -57,7 +57,7 @@ void main() {
 
     mockValidation3(ValidationError.invalidField);
 
-    final error = sut.validate(field: 'any_field', value: 'any_value');
+    final error = sut.validate(field: 'any_field', input: {'any_field':'any_value'});
     expect(error, ValidationError.invalidField);
   });
 }

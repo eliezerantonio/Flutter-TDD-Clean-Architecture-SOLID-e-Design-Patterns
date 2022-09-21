@@ -10,15 +10,15 @@ void main() {
 
   ///se nao tem valor
   test('Should return null if email is empty', () {
-    expect(sut.validate(''), null);
+    expect(sut.validate({'any_field':''}), null);
   });
   test('Should return null if email is null', () {
-    expect(sut.validate(null), null);
+    expect(sut.validate({'any_field':null}), null);
   });
   test('Should return null if email is valid', () {
-    expect(sut.validate('eliezer@gmail.com'), null);
+    expect(sut.validate({'any_field':'eliezer@gmail.com'}), null);
   });
   test('Should return null if email is invalid', () {
-    expect(sut.validate('eliezer'), ValidationError.invalidField);
+    expect(sut.validate({'any_field':'eliezer'}), ValidationError.invalidField);
   });
 }

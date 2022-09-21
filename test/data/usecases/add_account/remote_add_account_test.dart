@@ -96,7 +96,7 @@ void main() {
     mockHttpData(validData);
     final account = await sut.add(params);
 
-    expect(account.token, throwsA(DomainError.emailInUse));
+    expect(account.token, validData['accessToken']);
   });
   test(
       'Should throw UnexpectedError if HttpClient returns 200 with invalid data ',

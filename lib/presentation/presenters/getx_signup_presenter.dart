@@ -33,38 +33,39 @@ class GetxSignUpPresenter extends GetxController implements SignUpPresenter {
   Stream<UIError> get nameErrorStream => _nameError.stream;
   Stream<UIError> get passwordErrorStream => _passwordError.stream;
   Stream<UIError> get passwordConfirmationErrorStream =>_passwordConfirmationError.stream;
-  Stream<String> get navigateToStream => _navigateTo.stream;
-  Stream<bool> get isFormValidStream => _isFormValid.stream;
+  Stream<String>  get navigateToStream => _navigateTo.stream;
+  Stream<bool>    get isFormValidStream => _isFormValid.stream;
   Stream<UIError> get mainErrorStream => _mainError.stream;
 
   Stream<bool> get isLoadingStream => _isLoading.stream;
 
   void validateEmail(String email) {
     _email = email;
-    _emailError.value = _validateField(field: 'email', value: email);
+    _emailError.value = _validateField('email', );
     _validadeForm();
   }
 
   void validateName(String name) {
     _name = name;
-    _nameError.value = _validateField(field: 'name', value: name);
+    _nameError.value = _validateField( 'name',) ;
     _validadeForm();
   }
 
   void validatePassword(String password) {
     _password = password;
-    _passwordError.value = _validateField(field: 'password', value: password);
+    _passwordError.value = _validateField( 'password', );
     _validadeForm();
   }
 
   void validatePasswordConfirmation(String passwordConfirmation) {
     _passwordConfirmation = passwordConfirmation;
-    _passwordConfirmationError.value = _validateField(field: 'passwordConfirmation', value: passwordConfirmation);
+    _passwordConfirmationError.value = _validateField( 'passwordConfirmation',);
     _validadeForm();
   }
 
-  UIError _validateField({String field, String value}) {
-    final error = validation.validate(field: field, value: value);
+  UIError _validateField(String field, ) {
+    final formData={'name':_name,'email': _email, 'password': _password, 'passwordConfirmation':_passwordConfirmation};
+    final error = validation.validate(field: field, input: formData);
 
     switch (error) {
       case ValidationError.invalidField:
@@ -77,14 +78,14 @@ class GetxSignUpPresenter extends GetxController implements SignUpPresenter {
   }
 
   void _validadeForm() {
-    _isFormValid.value = _emailError.value == null &&
-        _passwordError.value == null &&
-        _passwordConfirmationError.value == null &&
-        _nameError.value == null &&
-        _email != null &&
-        _name != null &&
-        _password != null &&
-        _passwordConfirmation != null;
+    _isFormValid.value = _emailError.value == null
+     && _passwordError.value == null 
+     && _passwordConfirmationError.value == null 
+     && _nameError.value == null
+     && _email != null 
+     &&  _name != null 
+     &&_password != null
+     && _passwordConfirmation != null;
   }
 
   Future<void> signUp() async {

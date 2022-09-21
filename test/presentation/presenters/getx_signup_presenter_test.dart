@@ -26,7 +26,7 @@ void main() {
 
   PostExpectation mockValidationCall(String field) => when(validation.validate(
       field: field == null ? anyNamed('field') : field,
-      value: anyNamed('value')));
+      input: anyNamed('input')));
 
   void mockValidation({String field, ValidationError value}) {
     mockValidationCall(field).thenReturn(value);
@@ -63,8 +63,11 @@ void main() {
 //email
 
   test('Should call Validation with correct email', () {
+
+      final formData={'name': null, 'email' : email, 'password' : null, 'passwordConfirmation' : null};
+
     sut.validateEmail(email);
-    verify(validation.validate(field: 'email', value: email)).called(1);
+    verify(validation.validate(field: 'email', input: formData)).called(1);
   });
 
   test('Should emit invalidFieldError if email is invalid', () {
@@ -98,8 +101,10 @@ void main() {
 //name
 
   test('Should call Validation with correct name', () {
+     final formData={'name': name, 'email' : null, 'password' : null, 'passwordConfirmation' : null};
+
     sut.validateName(name);
-    verify(validation.validate(field: 'name', value: name)).called(1);
+    verify(validation.validate(field: 'name', input: formData)).called(1);
   });
 
   test('Should emit invalidFieldError if name is invalid', () {
@@ -132,13 +137,17 @@ void main() {
 //password
 
   test('Should call validation with correct password', () {
+         final formData={'name': null, 'email' : null, 'password' : password, 'passwordConfirmation' : null};
+
     sut.validatePassword(password);
-    verify(validation.validate(field: 'password', value: password)).called(1);
+    verify(validation.validate(field: 'password', input: formData)).called(1);
   });
 
   test('Should call validation with correct password', () {
+   final formData={'name': null, 'email' : null, 'password' : password, 'passwordConfirmation' : null};
+
     sut.validatePassword(password);
-    verify(validation.validate(field: 'password', value: password)).called(1);
+    verify(validation.validate(field: 'password', input: formData)).called(1);
   });
 
   test('Should emit password error if validation fails ', () {
@@ -161,13 +170,17 @@ void main() {
   //passwordConfirmation
 
   test('Should call validation with correct passwordConfirmation', () {
+      final formData={'name': null, 'email' : null, 'password' : null, 'passwordConfirmation' : passwordConfirmation};
+
     sut.validatePasswordConfirmation(passwordConfirmation);
-    verify(validation.validate(field: 'passwordConfirmation', value: passwordConfirmation)).called(1);
+    verify(validation.validate(field: 'passwordConfirmation', input: formData)).called(1);
   });
 
   test('Should call validation with correct passwordConfirmation', () {
+    final formData={'name': null, 'email' : null, 'password' : null, 'passwordConfirmation' : passwordConfirmation};
+
     sut.validatePasswordConfirmation(passwordConfirmation);
-    verify(validation.validate(field: 'passwordConfirmation', value: passwordConfirmation)).called(1);
+    verify(validation.validate(field: 'passwordConfirmation', input: formData)).called(1);
   });
 
   test('Should emit passwordConfirmation error if validation fails ', () {
