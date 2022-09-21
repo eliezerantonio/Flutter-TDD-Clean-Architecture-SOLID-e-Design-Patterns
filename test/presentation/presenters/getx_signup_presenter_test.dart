@@ -285,6 +285,14 @@ test('Should emit currect event on UnexpectedError', () async {
     sut.mainErrorStream.listen(expectAsync1((error) => expect(error, UIError.unexpected)));
     await sut.signUp();
   });
+
+   test('Should go to LoginPage on link click', (){
+    
+  sut.navigateToStream.listen(expectAsync1((page) => expect(page, '/login')));
+  sut.goToLogin();
+
+
+  });
 }
 
 

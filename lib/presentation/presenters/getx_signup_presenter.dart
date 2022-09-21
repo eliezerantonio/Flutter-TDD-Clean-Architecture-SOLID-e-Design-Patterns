@@ -4,9 +4,10 @@ import 'package:get/state_manager.dart';
 
 import '../../domain/helpers/helpers.dart';
 import '../../ui/helpers/errors/errors.dart';
+import '../../ui/pages/signup/signup_presenter.dart';
 import '../protocols/protocols.dart';
 
-class GetxSignUpPresenter extends GetxController {
+class GetxSignUpPresenter extends GetxController implements SignUpPresenter {
   GetxSignUpPresenter(
       {@required this.validation, this.addAccount, this.saveCurrentAccount});
 
@@ -108,5 +109,10 @@ class GetxSignUpPresenter extends GetxController {
     _isLoading.value=false;
      
    }
+  }
+  
+  @override
+  void goToLogin() {
+  _navigateTo.value = "/login";
   }
 }

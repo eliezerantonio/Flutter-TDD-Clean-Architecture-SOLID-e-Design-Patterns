@@ -72,7 +72,7 @@ class SignUpPage extends StatelessWidget {
                           ),
                           SignupButton(),
                           TextButton.icon(
-                            onPressed: () {},
+                            onPressed: presenter.goToLogin,
                             icon: Icon(Icons.exit_to_app,
                                 color: Theme.of(context).primaryColor),
                             label: Text(
