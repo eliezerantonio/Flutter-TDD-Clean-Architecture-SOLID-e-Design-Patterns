@@ -11,10 +11,8 @@ class CompareFieldValidation implements FieldValidation {
   String fieldToCompare ; 
 
   @override
-  ValidationError validate(Map input,) {
+  ValidationError validate(Map input,) => input[field] !=null &&   input[fieldToCompare]!=null &&  input[field] !=input[fieldToCompare] ?    ValidationError.invalidField:null;
 
-   return  input[field].contains(input[fieldToCompare]) ? null: ValidationError.invalidField;
-
-  }
+  
 
 }
