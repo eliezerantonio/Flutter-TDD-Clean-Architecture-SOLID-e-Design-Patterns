@@ -4,6 +4,7 @@ import 'package:get/route_manager.dart';
 import 'package:provider/provider.dart';
 
 import '/main/factories/factories.dart';
+import 'main/factories/pages/signup/signup.dart';
 import 'ui/components/componets.dart';
 import 'ui/helpers/i18n/resources.dart';
 
@@ -28,7 +29,7 @@ class App extends StatelessWidget {
       getPages: [
         GetPage(name: '/', page: makeSplashPage, transition: Transition.fade),
         GetPage(name: '/login', page: makeLoginPage, transition: Transition.fadeIn),
-        GetPage(name: '/signup', page: makeLoginPage, transition: Transition.fadeIn),
+        GetPage(name: '/signup', page: makeSignUpPage, transition: Transition.fadeIn),
         GetPage(name: '/surveys',page: () => Scaffold(body: Text("Enquetes")),transition: Transition.fadeIn),
       ],
     );

@@ -13,7 +13,6 @@ class NameInput extends StatelessWidget {
         stream: presenter.nameErrorStream,
         builder: (context, snapshot) {
           return TextFormField(
-            obscureText: true,
             onChanged: presenter.validateName,
             decoration: InputDecoration(
               labelText: R.string.name,
