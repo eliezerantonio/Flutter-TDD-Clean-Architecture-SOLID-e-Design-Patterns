@@ -26,6 +26,11 @@ class ValidationBuilder {
 
     return this;
   }
+  ValidationBuilder main(int size) {
+    validations.add(MinLengthValidation(field:fieldName, size:size));
+
+    return this;
+  }
 
   List<FieldValidation> build() => validations;
 }
