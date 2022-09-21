@@ -3,7 +3,6 @@ import 'package:flutter_tdd_clean_architecture/ui/pages/pages.dart';
 import 'package:provider/provider.dart';
 
 import '../../../helpers/i18n/resources.dart';
-import '../../login/login_presenter.dart';
 
 class SignupButton extends StatelessWidget {
   @override

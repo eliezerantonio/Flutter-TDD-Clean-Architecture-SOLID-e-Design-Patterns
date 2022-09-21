@@ -1,5 +1,4 @@
 import 'package:flutter_tdd_clean_architecture/presentation/protocols/validation.dart';
-import 'package:flutter_tdd_clean_architecture/ui/helpers/errors/errors.dart';
 import 'package:flutter_tdd_clean_architecture/validation/validators/validators.dart';
 import 'package:flutter_test/flutter_test.dart';
 

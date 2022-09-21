@@ -5,11 +5,11 @@ import 'package:test/test.dart';
 
 void main() {
 
-  CompareFieldValidation sut;
+  CompareFieldsValidation sut;
 
   setUp(() {
 
-    sut= CompareFieldValidation(field: 'any_field', fieldToCompare: 'other_field');
+    sut= CompareFieldsValidation(field: 'any_field', fieldToCompare: 'other_field');
   });
 
   test('Should return error if values are not equal', () {
