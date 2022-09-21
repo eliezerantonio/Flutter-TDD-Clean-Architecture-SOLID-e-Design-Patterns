@@ -1,25 +1,9 @@
 
 import 'package:flutter_tdd_clean_architecture/presentation/protocols/protocols.dart';
+import 'package:flutter_tdd_clean_architecture/validation/validators/validators.dart';
 import 'package:test/test.dart';
 
-class CompareFieldValidation implements FieldValidation {
 
-  CompareFieldValidation({this.field, this.valueToCompare});
-
-
-  @override
-  String field ; 
-
-  String valueToCompare ; 
-
-  @override
-  ValidationError validate(String value,) {
-
-   return  value.contains(valueToCompare) ? null: ValidationError.invalidField;
-
-  }
-
-}
 
 
 void main() {
