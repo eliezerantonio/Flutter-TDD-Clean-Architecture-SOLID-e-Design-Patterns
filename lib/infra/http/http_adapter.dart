@@ -27,6 +27,9 @@ class HttpAdapter implements HttpClient {
       if (method == 'post') {
         response = await client.post(Uri.parse(url), headers: headers, body: jsonBody);
       }
+      else if (method == 'get') {
+        response = await client.get(Uri.parse(url), headers: headers,);
+      }
     } catch(error) {
       throw HttpError.serverError;
     }
