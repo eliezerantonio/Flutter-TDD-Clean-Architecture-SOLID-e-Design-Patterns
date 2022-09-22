@@ -8,7 +8,7 @@ import 'package:flutter_tdd_clean_architecture/data/http/http.dart';
 
 import 'package:flutter_tdd_clean_architecture/domain/usecases/usecases.dart';
 
-class HttpClientSpy extends Mock implements HttpClient {}
+class HttpClientSpy extends Mock implements HttpClient<Map> {}
 
 void main() {
   RemoteAddAccount sut;
