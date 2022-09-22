@@ -1,33 +1,11 @@
 import 'package:faker/faker.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
-import 'package:meta/meta.dart';
 
+import 'package:flutter_tdd_clean_architecture/data/usecases/usecases.dart';
 import 'package:flutter_tdd_clean_architecture/data/http/http.dart';
-import 'package:flutter_tdd_clean_architecture/data/models/models.dart';
 import 'package:flutter_tdd_clean_architecture/domain/entities/entities.dart';
 import 'package:flutter_tdd_clean_architecture/domain/helpers/helpers.dart';
-
-class RemoteLoadSurveys {
-  RemoteLoadSurveys({@required this.url, @required this.httpClient});
-  final String url;
-
-  final HttpClient<List<Map>> httpClient;
-
-  Future<List<SurveyEntity>> load() async {
-   try{
-
-
- final httpResponse = await httpClient.request(url: url, method: 'get');
-
-    return httpResponse.map((json) => RemoteSurveyModel.fromJson(json).toEntity()).toList();
-   }on HttpError catch (error) {
-      throw error == HttpError.forbidden
-          ? DomainError.accessDenied
-          : DomainError.unexpected;
-    }
-  }
-}
 
 class HttpClientSpy extends Mock implements HttpClient<List<Map>> {}
 
@@ -67,7 +45,6 @@ void main() {
     mockRequest().thenThrow(error);
   }
 
-
   setUp(() {
     url = faker.internet.httpUrl();
     httpClient = HttpClientSpy();
@@ -100,36 +77,35 @@ void main() {
     ]);
   });
 
-  test('Should throw UnexpectedError if HttpClient returns 200 with invalid data ',() async {
-    mockHttpData([{'invalid_key': 'invalid_value'}]);
+  test(
+      'Should throw UnexpectedError if HttpClient returns 200 with invalid data ',
+      () async {
+    mockHttpData([
+      {'invalid_key': 'invalid_value'}
+    ]);
     final future = sut.load();
 
     expect(future, throwsA(DomainError.unexpected));
-  }); 
+  });
 
+  test('Should throw UnexpectedError if HttpClient returns 404', () {
+    mockHttpError(HttpError.notFound);
+    final future = sut.load();
 
-test('Should throw UnexpectedError if HttpClient returns 404',(){
-mockHttpError(HttpError.notFound);
-final future =sut.load();
+    expect(future, throwsA(DomainError.unexpected));
+  });
 
-expect(future, throwsA(DomainError.unexpected));
+  test('Should throw UnexpectedError if HttpClient returns 500', () {
+    mockHttpError(HttpError.serverError);
+    final future = sut.load();
 
-});
+    expect(future, throwsA(DomainError.unexpected));
+  });
 
-test('Should throw UnexpectedError if HttpClient returns 500',(){
-mockHttpError(HttpError.serverError);
-final future =sut.load();
+  test('Should throw AccessDeniedError if HttpClient returns 403', () {
+    mockHttpError(HttpError.forbidden);
+    final future = sut.load();
 
-expect(future, throwsA(DomainError.unexpected));
-
-});
-
-test('Should throw AccessDeniedError if HttpClient returns 403',(){
-mockHttpError(HttpError.forbidden);
-final future =sut.load();
-
-expect(future, throwsA(DomainError.accessDenied));
-
-});
-  
+    expect(future, throwsA(DomainError.accessDenied));
+  });
 }
