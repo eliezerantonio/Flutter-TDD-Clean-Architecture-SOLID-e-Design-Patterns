@@ -12,6 +12,7 @@ ThemeData makeAppATheme() {
     primaryColorDark: primaryColorDark,
     primaryColorLight: primaryColorLight,
     backgroundColor: Colors.white,
+    secondaryHeaderColor:secondaryColorDark,
     textTheme: TextTheme(
       headline1: TextStyle(
         fontSize: 30,

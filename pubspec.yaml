@@ -21,10 +21,11 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  carousel_slider: ^4.1.1
   cupertino_icons: ^1.0.0
+  equatable: ^2.0.3
   flutter:
     sdk: flutter
-  equatable: ^2.0.3
   flutter_secure_storage: ^5.0.2
   get: ^4.6.1
   http: ^0.13.4

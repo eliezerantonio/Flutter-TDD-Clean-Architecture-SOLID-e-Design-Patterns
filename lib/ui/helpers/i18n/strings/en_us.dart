@@ -27,4 +27,7 @@ class EnUs implements Translations {
   String get name => 'Name';
   @override
   String get password => 'Password';
+
+   @override
+  String get surveys => 'Surveys';
 }

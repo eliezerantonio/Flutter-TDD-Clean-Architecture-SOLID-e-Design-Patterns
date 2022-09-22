@@ -36,4 +36,7 @@ class PtPt implements Translations {
   
   @override
   String get msgEmailInUse => 'Email ja esta ser utilizado';
+  
+  @override
+  String get surveys => 'Enquetes';
 }
