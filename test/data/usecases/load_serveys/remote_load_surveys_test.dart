@@ -1,10 +1,12 @@
 import 'package:faker/faker.dart';
-import 'package:flutter_tdd_clean_architecture/data/http/http.dart';
-import 'package:flutter_tdd_clean_architecture/data/models/models.dart';
-import 'package:flutter_tdd_clean_architecture/domain/entities/entities.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 import 'package:meta/meta.dart';
+
+import 'package:flutter_tdd_clean_architecture/data/http/http.dart';
+import 'package:flutter_tdd_clean_architecture/data/models/models.dart';
+import 'package:flutter_tdd_clean_architecture/domain/entities/entities.dart';
+import 'package:flutter_tdd_clean_architecture/domain/helpers/helpers.dart';
 
 class RemoteLoadSurveys {
   RemoteLoadSurveys({@required this.url, @required this.httpClient});
@@ -13,11 +15,16 @@ class RemoteLoadSurveys {
   final HttpClient<List<Map>> httpClient;
 
   Future<List<SurveyEntity>> load() async {
-    final httpResponse = await httpClient.request(url: url, method: 'get');
+   try{
 
-    return httpResponse
-        .map((json) => RemoteSurveyModel.fromJson(json).toEntity())
-        .toList();
+
+ final httpResponse = await httpClient.request(url: url, method: 'get');
+
+    return httpResponse.map((json) => RemoteSurveyModel.fromJson(json).toEntity()).toList();
+   }on HttpError{
+
+    throw DomainError.unexpected;
+   }
   }
 }
 
@@ -29,7 +36,7 @@ void main() {
   List<Map> list;
   HttpClientSpy httpClient;
   RemoteLoadSurveys sut;
-  
+
   List<Map> mockValidData() => [
         {
           'id': faker.guid.guid(),
@@ -86,4 +93,13 @@ void main() {
       ),
     ]);
   });
+
+  test('Should throw UnexpectedError if HttpClient returns 200 with invalid data ',() async {
+    mockHttpData([{'invalid_key': 'invalid_value'}]);
+    final future = sut.load();
+
+    expect(future, throwsA(DomainError.unexpected));
+  });
+
+  
 }
