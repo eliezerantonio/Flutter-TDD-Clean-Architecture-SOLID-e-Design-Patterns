@@ -16,7 +16,7 @@ class SurveyItem extends StatelessWidget {
                   blurRadius: 2,
                   color: Colors.black),
             ],
-            borderRadius: BorderRadius.all(Radius.circular(10))),
+            borderRadius: BorderRadius.all(Radius.circular(10),),),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -26,7 +26,7 @@ class SurveyItem extends StatelessWidget {
                     fontSize: 20,
                     fontWeight: FontWeight.bold)),
             SizedBox(height: 20),
-            Text("20 setembro 2022",
+            Text("Qual e o sue framework web favorito",
                 style: TextStyle(color: Colors.white, fontSize: 24)),
             Text("Ama o flutter?",
                 style: TextStyle(color: Colors.white, fontSize: 24)),
