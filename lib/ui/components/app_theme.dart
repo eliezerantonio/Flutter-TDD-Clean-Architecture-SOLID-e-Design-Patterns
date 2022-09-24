@@ -13,6 +13,7 @@ ThemeData makeAppATheme() {
     primaryColorLight: primaryColorLight,
     backgroundColor: Colors.white,
     secondaryHeaderColor:secondaryColorDark,
+   appBarTheme: AppBarTheme(backgroundColor:primaryColor),
     textTheme: TextTheme(
       headline1: TextStyle(
         fontSize: 30,
