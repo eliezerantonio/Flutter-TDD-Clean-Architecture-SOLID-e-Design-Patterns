@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_tdd_clean_architecture/ui/helpers/errors/errors.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 
@@ -11,10 +12,12 @@ class SurveysPresenterSpy extends Mock implements SurveysPresenter{}
 void main() {
   SurveysPresenterSpy presenter=SurveysPresenterSpy();
   StreamController<bool> isLoadingController;
+  StreamController<List<SurveyViewModel>> loadSurveysController;
 
   void initStreams() {
   
     isLoadingController= new StreamController<bool>();
+    loadSurveysController= new StreamController<List<SurveyViewModel>>();
   }
 
 
@@ -22,12 +25,14 @@ void main() {
   
     when(presenter.isLoadingStream) .thenAnswer((_) => isLoadingController.stream);
     
+    when(presenter.loadSurveysStrem).thenAnswer((_) => loadSurveysController.stream);
 
   }
 
   void closeStreams() {
  
     isLoadingController.close();
+    loadSurveysController.close();
   
   }
 
@@ -72,4 +77,18 @@ void main() {
 
 
   });
+
+    testWidgets('Should Present error if loadSurveysStream fails', (WidgetTester tester)async{
+    await loadPage(tester);
+
+    loadSurveysController.addError(UIError.unexpected.description);
+
+    await tester.pump();
+
+   expect(find.text('Deu errado, tente novamente'), findsOneWidget);
+   expect(find.text('Recarregar'), findsOneWidget);
+   expect(find.text('Question 1'), findsNothing);
+
+
+    });
 }
