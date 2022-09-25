@@ -1,4 +1,6 @@
 import 'package:faker/faker.dart';
+import 'package:flutter_tdd_clean_architecture/domain/helpers/helpers.dart';
+import 'package:flutter_tdd_clean_architecture/ui/helpers/errors/errors.dart';
 import 'package:flutter_tdd_clean_architecture/ui/pages/pages.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -20,7 +22,10 @@ class GetxSurveysPresenter {
   GetxSurveysPresenter({@required this.loadSurveys});
 
   Future<void> loadData() async {
-    _isLoading.value = true;
+   try{
+
+
+ _isLoading.value = true;
     final surveys = await loadSurveys.load();
     _surveys.value = surveys
         .map((survey) => SurveyViewModel(
@@ -30,7 +35,13 @@ class GetxSurveysPresenter {
             didAnswer: survey.didAnswer))
         .toList();
 
-    _isLoading.value = false;
+   } on DomainError {
+      _surveys.subject.addError(UIError.unexpected.description);
+
+   } finally{
+     _isLoading.value = false;
+   }
+   
   }
 }
 
@@ -54,10 +65,14 @@ void main() {
             didAnswer: false)
       ];
 
+
+PostExpectation  mockLoadSurveysCall()=> when(loadSurveys.load());
   void mockLoadSurveys(List<SurveyEntity> data) {
     surveys = data;
-    when(loadSurveys.load()).thenAnswer((_) async => data);
+   mockLoadSurveysCall().thenAnswer((_) async => data);
   }
+
+  void mockLoadSurveysError()=>mockLoadSurveysCall().thenThrow(DomainError.unexpected);
 
   setUp(() {
     loadSurveys = LoadSurveysSpy();
@@ -88,6 +103,21 @@ void main() {
                 date: '13 Out 2021',
                 didAnswer: surveys[1].didAnswer)
           ],
+        ),
+      ),
+    );
+
+    await sut.loadData();
+  }); 
+  
+  test('Should emit correct events on failure', () async {
+    mockLoadSurveysError();
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+    sut.loadSurveysStrem.listen(null,onError:
+      expectAsync1(
+        (error) => expect(
+          error,
+          UIError.unexpected.description
         ),
       ),
     );
