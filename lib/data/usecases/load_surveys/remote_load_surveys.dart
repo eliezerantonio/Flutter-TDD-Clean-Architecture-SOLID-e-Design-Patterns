@@ -10,7 +10,7 @@ class RemoteLoadSurveys  implements LoadSurveys{
   RemoteLoadSurveys({@required this.url, @required this.httpClient});
   final String url;
 
-  final HttpClient<List<Map>> httpClient;
+  final HttpClient httpClient;
 
   Future<List<SurveyEntity>> load() async {
     try {
@@ -18,7 +18,7 @@ class RemoteLoadSurveys  implements LoadSurveys{
 
       final httpResponse = await httpClient.request(url: url, method: 'get');
 
-      return httpResponse.map((json) => RemoteSurveyModel.fromJson(json).toEntity()).toList();
+      return httpResponse.map<SurveyEntity>((json) => RemoteSurveyModel.fromJson(json).toEntity()).toList();
       
     } on HttpError catch (error) {
       throw error == HttpError.forbidden

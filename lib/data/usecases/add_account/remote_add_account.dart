@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_tdd_clean_architecture/data/models/models.dart';
 import 'package:flutter_tdd_clean_architecture/domain/entities/account_entity.dart';
 import 'package:meta/meta.dart';
@@ -8,7 +10,7 @@ import '../../../domain/usecases/usecases.dart';
 import '../../http/http.dart';
 
 class RemoteAddAccount implements AddAccount {
-  final HttpClient<Map> httpClient;
+  final HttpClient httpClient;
   final String url;
   RemoteAddAccount({@required this.httpClient, this.url});
 

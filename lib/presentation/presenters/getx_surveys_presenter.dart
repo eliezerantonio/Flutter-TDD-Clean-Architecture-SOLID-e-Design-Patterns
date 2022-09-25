@@ -7,7 +7,7 @@ import '../../domain/usecases/usecases.dart';
 import '../../ui/helpers/errors/errors.dart';
 import '../../ui/pages/surveys/surveys.dart';
 
-class GetxSurveysPresenter {
+class GetxSurveysPresenter implements SurveysPresenter {
   final LoadSurveys loadSurveys;
   final _isLoading = true.obs;
   final _surveys = Rx<List<SurveyViewModel>>([]);

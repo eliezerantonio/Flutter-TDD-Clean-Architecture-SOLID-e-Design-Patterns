@@ -7,7 +7,7 @@ import 'package:flutter_tdd_clean_architecture/data/http/http.dart';
 import 'package:flutter_tdd_clean_architecture/domain/entities/entities.dart';
 import 'package:flutter_tdd_clean_architecture/domain/helpers/helpers.dart';
 
-class HttpClientSpy extends Mock implements HttpClient<List<Map>> {}
+class HttpClientSpy extends Mock implements HttpClient {}
 
 void main() {
   String url;

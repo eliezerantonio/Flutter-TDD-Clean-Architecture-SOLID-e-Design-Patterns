@@ -9,7 +9,7 @@ import 'package:flutter_tdd_clean_architecture/data/http/http.dart';
 import 'package:flutter_tdd_clean_architecture/domain/helpers/helpers.dart';
 import 'package:flutter_tdd_clean_architecture/domain/usecases/usecases.dart';
 
-class HttpClientSpy extends Mock implements HttpClient<Map> {}
+class HttpClientSpy extends Mock implements HttpClient {}
 
 void main() {
   RemoteAuthentication sut;
