@@ -55,7 +55,23 @@ void main() {
         },
         body: '{"any_key":"any_value"}'
       ));
+
+
+      ///   
+      await sut.request(url: url, method: 'post', body: {'any_key': 'any_value'}, headers:{'any_header':'any_value'});
+
+      verify(client.post(
+        Uri.parse(url),
+        headers: {
+          'content-type': 'application/json',
+          'accept': 'application/json', 
+          'any_header': 'any_value'
+        },
+        body: '{"any_key":"any_value"}'
+      ));
     });
+
+    
 
     test('Should call post without body', () async {
       await sut.request(url: url, method: 'post');
@@ -178,6 +194,18 @@ void main() {
         headers: {
           'content-type': 'application/json',
           'accept': 'application/json'
+        },
+       
+      )); 
+      
+      await sut.request(url: url, method: 'get',headers:{ 'any_header': 'any_value'});
+
+      verify(client.get(
+        Uri.parse(url),
+        headers: {
+          'content-type': 'application/json',
+          'accept': 'application/json',
+           'any_header': 'any_value'
         },
        
       ));

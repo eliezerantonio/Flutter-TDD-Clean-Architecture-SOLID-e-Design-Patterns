@@ -21,10 +21,10 @@ class GetxSurveysPresenter implements SurveysPresenter {
    try{
 
 
- _isLoading.value = true;
+    _isLoading.value = true;
     final surveys = await loadSurveys.load();
-    _surveys.value = surveys
-        .map((survey) => SurveyViewModel(
+
+    _surveys.value = surveys.map((survey) => SurveyViewModel(
             id: survey.id,
             question: survey.question,
             date: DateFormat('dd MMM yyy').format(survey.dateTime),
@@ -32,7 +32,8 @@ class GetxSurveysPresenter implements SurveysPresenter {
         .toList();
 
    } on DomainError {
-          _surveys.subject.addError(UIError.unexpected.description);
+
+      _surveys.subject.addError(UIError.unexpected.description);
 
    } finally{
      _isLoading.value = false;
