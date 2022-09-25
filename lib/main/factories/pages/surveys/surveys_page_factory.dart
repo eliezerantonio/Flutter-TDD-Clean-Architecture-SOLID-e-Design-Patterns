@@ -4,5 +4,5 @@ import '../../../../ui/pages/pages.dart';
 import '../../factories.dart';
 
 
-Widget makeSurveysPage() => SurveysPage(null);
+Widget makeSurveysPage() => SurveysPage(makeGetxSurveyPresenter());
 
