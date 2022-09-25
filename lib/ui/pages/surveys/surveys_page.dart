@@ -19,42 +19,39 @@ class SurveysPage extends StatelessWidget {
       ),
       body: Builder(builder: (context) {
         presenter.isLoadingStream.listen((isLoading) {
-          if (isLoading==true) {
+          if (isLoading == true) {
             showLoading(context);
-          }else{
+          } else {
             hideLoading(context);
           }
         });
 
-
         return StreamBuilder<List<SurveyViewModel>>(
+            stream: presenter.loadSurveysStrem,
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Column(children: [
+                  Text(snapshot.error),
+                  ElevatedButton(onPressed: null, child: Text(R.string.reload))
+                ]);
+              }
+              if (snapshot.hasData) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: CarouselSlider(
+                    items: snapshot.data
+                        .map((viewModel) => SurveyItem(viewModel))
+                        .toList(),
+                    options: CarouselOptions(
+                      enlargeCenterPage: true,
+                      aspectRatio: 1,
+                    ),
+                  ),
+                );
+              }
 
-          stream: presenter.loadSurveysStrem,
-          builder: (context, snapshot) {
-            if(snapshot.hasError){
-
-              return Column(children:[
-              Text(snapshot.error),
-              ElevatedButton(onPressed:null, child: Text(R.string.reload))
-
-              ]);
-            }
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: CarouselSlider(
-                items: [
-                  SurveyItem(),
-                  SurveyItem(),
-                  SurveyItem(),
-                ],
-                options: CarouselOptions(
-                  enlargeCenterPage: true,
-                  aspectRatio: 1,
-                ),
-              ),
-            );
-          }
-        );
+              return Container();
+            });
       }),
     );
   }

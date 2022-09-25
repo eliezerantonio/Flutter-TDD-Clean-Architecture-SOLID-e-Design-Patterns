@@ -46,6 +46,14 @@ void main() {
 
   }
 
+  List<SurveyViewModel>makeSurveys()=>[
+  SurveyViewModel(id: '1', question:'Question 1', date:'Any Date', didAnswer:true),
+  SurveyViewModel(id: '2', question:'Question 2', date:'Any Date', didAnswer:false),
+
+  ];
+
+
+
   tearDown((){
     closeStreams();
   });
@@ -88,6 +96,21 @@ void main() {
    expect(find.text('Deu errado, tente novamente'), findsOneWidget);
    expect(find.text('Recarregar'), findsOneWidget);
    expect(find.text('Question 1'), findsNothing);
+
+
+    });
+
+     testWidgets('Should Present list if loadSurveysStream success', (WidgetTester tester)async{
+    await loadPage(tester);
+
+    loadSurveysController.add(makeSurveys());
+
+    await tester.pump();
+
+   expect(find.text('Deu errado, tente novamente'), findsNothing);
+   expect(find.text('Recarregar'), findsNothing);
+   expect(find.text('Question 1'), findsWidgets);
+   expect(find.text('Question 2'), findsWidgets);
 
 
     });

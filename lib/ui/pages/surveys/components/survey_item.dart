@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tdd_clean_architecture/ui/pages/pages.dart';
 
 class SurveyItem extends StatelessWidget {
+
+  final SurveyViewModel viewModel;
+
+  const SurveyItem( this.viewModel) ;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -26,10 +31,9 @@ class SurveyItem extends StatelessWidget {
                     fontSize: 20,
                     fontWeight: FontWeight.bold)),
             SizedBox(height: 20),
-            Text("Qual e o sue framework web favorito",
+            Text(viewModel.question,
                 style: TextStyle(color: Colors.white, fontSize: 24)),
-            Text("Ama o flutter?",
-                style: TextStyle(color: Colors.white, fontSize: 24)),
+           
           ],
         ),
       ),
