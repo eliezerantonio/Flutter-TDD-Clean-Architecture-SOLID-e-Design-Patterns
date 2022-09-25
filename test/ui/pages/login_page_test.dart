@@ -198,9 +198,6 @@ void main() {
   expect(find.byType(CircularProgressIndicator), findsNothing );
 
 
-
-
-
   });
 
   testWidgets('Should present error message if authentication fails',
