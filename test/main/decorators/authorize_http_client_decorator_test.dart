@@ -3,32 +3,29 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 import 'package:meta/meta.dart';
 
-class AuthorizeHttpClientDecorator{
-
+class AuthorizeHttpClientDecorator {
   final FetchSecureCacheStorage fetchSecureCacheStorage;
 
   AuthorizeHttpClientDecorator({@required this.fetchSecureCacheStorage});
 
-  Future<void>request()async{
+  Future<void> request() async {
     fetchSecureCacheStorage.fetchSecure('token');
-
-
   }
 }
 
-class FetchSecureCacheStorageSpy extends Mock implements FetchSecureCacheStorage
+class FetchSecureCacheStorageSpy extends Mock implements FetchSecureCacheStorage {}
 
-{
+void main() {
+  FetchSecureCacheStorageSpy fetchSecureCacheStorage;
+  AuthorizeHttpClientDecorator sut;
 
-}
-void main(){
+  setUp(() {
+    fetchSecureCacheStorage = FetchSecureCacheStorageSpy();
+    sut = AuthorizeHttpClientDecorator(fetchSecureCacheStorage: fetchSecureCacheStorage);
+  });
+  test('Should call FetchSecureCacheStorage with correct key ', () async {
+    await sut.request();
 
-  test('Should call FetchSecureCacheStorage with correct key ',()async{
-  final fetchSecureCacheStorage= FetchSecureCacheStorageSpy();
-  final sut=AuthorizeHttpClientDecorator(fetchSecureCacheStorage:fetchSecureCacheStorage);
-
-  await sut.request();
-
-  verify(fetchSecureCacheStorage.fetchSecure('token')).called(1);
+    verify(fetchSecureCacheStorage.fetchSecure('token')).called(1);
   });
 }
