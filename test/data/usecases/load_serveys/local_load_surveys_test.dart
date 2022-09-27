@@ -11,9 +11,14 @@ class FetchCacheStorageSpy extends Mock implements FetchCacheStorage {}
 
 
 void main() {
-  FetchCacheStorageSpy fetchCacheStorage;
+
+  group('Load', (){
+
+
+     FetchCacheStorageSpy fetchCacheStorage;
   LocalLoadSurveys sut;
   List<Map> data;
+
 
   List<Map> mockValidData() => [
       {
@@ -117,4 +122,6 @@ void main() {
 
     expect(future, throwsA(DomainError.unexpected) );
   });
+  });
+ 
 }
