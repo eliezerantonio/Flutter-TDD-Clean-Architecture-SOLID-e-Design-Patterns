@@ -16,10 +16,17 @@ class LocalLoadSurveys {
   Future<List<SurveyEntity>> load() async {
    final data=await fetchCacheStorage.fetch('surveys');
 
-   if(data?.isEmpty !=false){
-    throw DomainError.unexpected;
-   }
-   return data.map<SurveyEntity>((json)=>LocalSurveyModel.fromJson(json).toEntity()).toList();
+try {
+      if (data?.isEmpty != false) {
+        throw Exception();
+      }
+      return data
+          .map<SurveyEntity>(
+              (json) => LocalSurveyModel.fromJson(json).toEntity())
+          .toList();
+    } catch (error) {
+      throw DomainError.unexpected;
+    }
   }
 }
 
@@ -50,7 +57,7 @@ void main() {
     ];
 
     void mockFetch(List<Map> list){
-data=list;
+    data=list;
     when(fetchCacheStorage.fetch(any)).thenAnswer((_) async => data);
     }
 
@@ -89,6 +96,20 @@ data=list;
   test('Should throw UnexpectedError if cache is null', () async {
     
     mockFetch(null);
+
+    final future =  sut.load();
+
+    expect(future, throwsA(DomainError.unexpected) );
+  });
+  
+  test('Should throw UnexpectedError if cache is invalid', () async {
+    
+    mockFetch([{
+       'id':faker.guid.guid(),
+       'question':faker.randomGenerator.string(10),
+       'date':'invlaid date',
+       'didAnswer':'false',
+      },]);
 
     final future =  sut.load();
 
