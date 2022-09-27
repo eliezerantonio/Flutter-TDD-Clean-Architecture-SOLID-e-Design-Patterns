@@ -181,6 +181,21 @@ void main() {
   });
 
 
+  test('Should call delete cache if it is incomplete', () async {
+
+    mockFetch([{
+      
+       'date':'2019-02-27T00:00:00Z',
+       'didAnswer':'false',
+      },]);
+
+    await sut.validate();
+
+    verify(cacheStorage.delete('surveys')).called(1);
+  });
+
+
+
   });
  
 }
