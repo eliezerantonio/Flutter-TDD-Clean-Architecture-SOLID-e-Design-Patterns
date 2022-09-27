@@ -1,40 +1,14 @@
 import 'package:faker/faker.dart';
-import 'package:flutter_tdd_clean_architecture/data/models/local_survey_model.dart';
-import 'package:flutter_tdd_clean_architecture/domain/entities/entities.dart';
-import 'package:flutter_tdd_clean_architecture/domain/helpers/helpers.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
-import 'package:meta/meta.dart';
 
-class LocalLoadSurveys {
-  final FetchCacheStorage fetchCacheStorage;
-
-  LocalLoadSurveys({
-    @required this.fetchCacheStorage,
-  });
-
-  Future<List<SurveyEntity>> load() async {
-
-try {
-   final data=await fetchCacheStorage.fetch('surveys');
-      if (data?.isEmpty != false) {
-        throw Exception();
-      }
-      return data
-          .map<SurveyEntity>(
-              (json) => LocalSurveyModel.fromJson(json).toEntity())
-          .toList();
-    } catch (error) {
-      throw DomainError.unexpected;
-    }
-  }
-}
+import 'package:flutter_tdd_clean_architecture/data/cache/chache.dart';
+import 'package:flutter_tdd_clean_architecture/data/usecases/usecases.dart';
+import 'package:flutter_tdd_clean_architecture/domain/entities/entities.dart';
+import 'package:flutter_tdd_clean_architecture/domain/helpers/helpers.dart';
 
 class FetchCacheStorageSpy extends Mock implements FetchCacheStorage {}
 
-abstract class FetchCacheStorage {
-  Future<dynamic> fetch(String key);
-}
 
 void main() {
   FetchCacheStorageSpy fetchCacheStorage;
