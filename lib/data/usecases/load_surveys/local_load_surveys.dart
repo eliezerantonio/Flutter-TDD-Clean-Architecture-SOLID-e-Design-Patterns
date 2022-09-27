@@ -27,9 +27,9 @@ try {
   }
 
   Future<void> validate()async{
- final data =await cacheStorage.fetch('surveys');
 
 try{
+ final data =await cacheStorage.fetch('surveys');
 
 
 

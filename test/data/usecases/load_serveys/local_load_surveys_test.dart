@@ -9,193 +9,190 @@ import 'package:flutter_tdd_clean_architecture/domain/helpers/helpers.dart';
 
 class CacheStorageSpy extends Mock implements CacheStorage {}
 
-
 void main() {
+  group('Load', () {
+    CacheStorageSpy cacheStorage;
+    LocalLoadSurveys sut;
+    List<Map> data;
 
-  group('Load', (){
+    List<Map> mockValidData() => [
+          {
+            'id': faker.guid.guid(),
+            'question': faker.randomGenerator.string(10),
+            'date': '2012-02-27T00:00:00Z',
+            'didAnswer': 'false',
+          },
+          {
+            'id': faker.guid.guid(),
+            'question': faker.randomGenerator.string(10),
+            'date': '2019-02-27T00:00:00Z',
+            'didAnswer': 'true',
+          },
+        ];
 
-  CacheStorageSpy cacheStorage;
-  LocalLoadSurveys sut;
-  List<Map> data;
+    PostExpectation mockFetchCall() => when(cacheStorage.fetch(any));
 
+    void mockFetch(List<Map> list) {
+      data = list;
+      mockFetchCall().thenAnswer((_) async => data);
+    }
 
-  List<Map> mockValidData() => [
-      {
-       'id':faker.guid.guid(),
-       'question':faker.randomGenerator.string(10),
-       'date':'2012-02-27T00:00:00Z',
-       'didAnswer':'false',
-      },
-       {
-       'id':faker.guid.guid(),
-       'question':faker.randomGenerator.string(10),
-       'date':'2019-02-27T00:00:00Z',
-       'didAnswer':'true',
-      },
-    ];
+    void mockFetchError() => mockFetchCall().thenThrow(Exception());
 
-    PostExpectation mockFetchCall()=> when(cacheStorage.fetch(any));
+    setUp(() {
+      cacheStorage = CacheStorageSpy();
+      sut = LocalLoadSurveys(cacheStorage: cacheStorage);
+      mockFetch(mockValidData());
+    });
+    test('Should call cacheStorage  with correct key', () async {
+      await sut.load();
 
+      verify(cacheStorage.fetch('surveys')).called(1);
+    });
 
-    void mockFetch(List<Map> list){
-    data=list;
-   mockFetchCall().thenAnswer((_) async => data);
-    } 
-    void mockFetchError()=>mockFetchCall().thenThrow(Exception());
-    
+    test('Should return a list of surveys on success', () async {
+      final surveys = await sut.load();
 
-  setUp(() {
-    cacheStorage = CacheStorageSpy();
-    sut = LocalLoadSurveys(cacheStorage: cacheStorage);
-    mockFetch(mockValidData());
-  });
-  test('Should call cacheStorage  with correct key', () async {
-    await sut.load();
+      expect(surveys, [
+        SurveyEntity(
+            id: data[0]['id'],
+            question: data[0]['question'],
+            dateTime: DateTime.utc(2012, 02, 27),
+            didAnswer: false),
+        SurveyEntity(
+            id: data[1]['id'],
+            question: data[1]['question'],
+            dateTime: DateTime.utc(2019, 02, 27),
+            didAnswer: false)
+      ]);
+    });
 
-    verify(cacheStorage.fetch('surveys')).called(1);
-  });
+    test('Should throw UnexpectedError if cache is empty', () async {
+      mockFetch([]);
 
-  test('Should return a list of surveys on success', () async {
-    
-    
+      final future = sut.load();
 
-    final surveys = await sut.load();
+      expect(future, throwsA(DomainError.unexpected));
+    });
 
-    expect(surveys, [
-      SurveyEntity(id: data[0]['id'], question: data[0]['question'], dateTime: DateTime.utc(2012,02,27), didAnswer: false),
-      SurveyEntity(id: data[1]['id'], question: data[1]['question'], dateTime: DateTime.utc(2019,02,27), didAnswer: false)
-    ]);
-  }); 
-  
-   test('Should throw UnexpectedError if cache is empty', () async {
-    
-    mockFetch([]);
+    test('Should throw UnexpectedError if cache is null', () async {
+      mockFetch(null);
 
-    final future =  sut.load();
+      final future = sut.load();
 
-    expect(future, throwsA(DomainError.unexpected) );
-  }); 
-  
-  test('Should throw UnexpectedError if cache is null', () async {
-    
-    mockFetch(null);
+      expect(future, throwsA(DomainError.unexpected));
+    });
 
-    final future =  sut.load();
+    test('Should throw UnexpectedError if cache is invalid', () async {
+      mockFetch([
+        {
+          'id': faker.guid.guid(),
+          'question': faker.randomGenerator.string(10),
+          'date': 'invlaid date',
+          'didAnswer': 'false',
+        },
+      ]);
 
-    expect(future, throwsA(DomainError.unexpected) );
-  });
-  
-  test('Should throw UnexpectedError if cache is invalid', () async {
-    
-    mockFetch([{
-       'id':faker.guid.guid(),
-       'question':faker.randomGenerator.string(10),
-       'date':'invlaid date',
-       'didAnswer':'false',
-      },]);
+      final future = sut.load();
 
-    final future =  sut.load();
+      expect(future, throwsA(DomainError.unexpected));
+    });
 
-    expect(future, throwsA(DomainError.unexpected) );
-  });
-  
-  test('Should throw UnexpectedError if cache is incomplete', () async {
-    
-    mockFetch([{
-       'question':faker.randomGenerator.string(10),
-       'date':'2012-02-27T00:00:00Z',
-     
-      },]);
+    test('Should throw UnexpectedError if cache is incomplete', () async {
+      mockFetch([
+        {
+          'question': faker.randomGenerator.string(10),
+          'date': '2012-02-27T00:00:00Z',
+        },
+      ]);
 
-    final future =  sut.load();
+      final future = sut.load();
 
-    expect(future, throwsA(DomainError.unexpected) );
-  });
-
+      expect(future, throwsA(DomainError.unexpected));
+    });
 
     test('Should throw UnexpectedError if  cache throw ', () async {
-    
-    mockFetchError();
+      mockFetchError();
 
-    final future =  sut.load();
+      final future = sut.load();
 
-    expect(future, throwsA(DomainError.unexpected) );
-  });
-  });
-
-
-  group('Validate', (){
-
-  CacheStorageSpy cacheStorage;
-  LocalLoadSurveys sut;
-  List<Map> data;
-
-
-  List<Map> mockValidData() => [
-      {
-       'id':faker.guid.guid(),
-       'question':faker.randomGenerator.string(10),
-       'date':'2012-02-27T00:00:00Z',
-       'didAnswer':'false',
-      },
-       {
-       'id':faker.guid.guid(),
-       'question':faker.randomGenerator.string(10),
-       'date':'2019-02-27T00:00:00Z',
-       'didAnswer':'true',
-      },
-    ];
-
-    PostExpectation mockFetchCall()=> when(cacheStorage.fetch(any));
-
-
-    void mockFetch(List<Map> list){
-    data=list;
-   mockFetchCall().thenAnswer((_) async => data);
-    } 
-    
-
-  setUp(() {
-    cacheStorage = CacheStorageSpy();
-    sut = LocalLoadSurveys(cacheStorage: cacheStorage);
-    mockFetch(mockValidData());
-  });
-  test('Should call cacheStorage  with correct key', () async {
-    await sut.validate();
-
-    verify(cacheStorage.fetch('surveys')).called(1);
-  });
-  
-   test('Should call delete cache if it is invalid', () async {
-
-    mockFetch([{
-       'id':faker.guid.guid(),
-       'question':faker.randomGenerator.string(10),
-       'date':'invlaid date',
-       'didAnswer':'false',
-      },]);
-
-    await sut.validate();
-
-    verify(cacheStorage.delete('surveys')).called(1);
+      expect(future, throwsA(DomainError.unexpected));
+    });
   });
 
+  group('Validate', () {
+    CacheStorageSpy cacheStorage;
+    LocalLoadSurveys sut;
+    List<Map> data;
 
-  test('Should call delete cache if it is incomplete', () async {
+    List<Map> mockValidData() => [
+          {
+            'id': faker.guid.guid(),
+            'question': faker.randomGenerator.string(10),
+            'date': '2012-02-27T00:00:00Z',
+            'didAnswer': 'false',
+          },
+          {
+            'id': faker.guid.guid(),
+            'question': faker.randomGenerator.string(10),
+            'date': '2019-02-27T00:00:00Z',
+            'didAnswer': 'true',
+          },
+        ];
 
-    mockFetch([{
-      
-       'date':'2019-02-27T00:00:00Z',
-       'didAnswer':'false',
-      },]);
+    PostExpectation mockFetchCall() => when(cacheStorage.fetch(any));
+    void mockFetchError() => mockFetchCall().thenThrow(Exception());
 
-    await sut.validate();
+    void mockFetch(List<Map> list) {
+      data = list;
+      mockFetchCall().thenAnswer((_) async => data);
+    }
 
-    verify(cacheStorage.delete('surveys')).called(1);
+    setUp(() {
+      cacheStorage = CacheStorageSpy();
+      sut = LocalLoadSurveys(cacheStorage: cacheStorage);
+      mockFetch(mockValidData());
+    });
+    test('Should call cacheStorage  with correct key', () async {
+      await sut.validate();
+
+      verify(cacheStorage.fetch('surveys')).called(1);
+    });
+
+    test('Should call delete cache if it is invalid', () async {
+      mockFetch([
+        {
+          'id': faker.guid.guid(),
+          'question': faker.randomGenerator.string(10),
+          'date': 'invlaid date',
+          'didAnswer': 'false',
+        },
+      ]);
+
+      await sut.validate();
+
+      verify(cacheStorage.delete('surveys')).called(1);
+    });
+
+    test('Should call delete cache if it is incomplete', () async {
+      mockFetch([
+        {
+          'date': '2019-02-27T00:00:00Z',
+          'didAnswer': 'false',
+        },
+      ]);
+
+      await sut.validate();
+
+      verify(cacheStorage.delete('surveys')).called(1);
+    });
+
+    test('Should call delete cache if it is throw', () async {
+      mockFetchError();
+
+      await sut.validate();
+
+      verify(cacheStorage.delete('surveys')).called(1);
+    });
   });
-
-
-
-  });
- 
 }
