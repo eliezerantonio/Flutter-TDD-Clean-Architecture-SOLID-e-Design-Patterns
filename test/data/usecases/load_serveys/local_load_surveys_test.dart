@@ -1,6 +1,7 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_tdd_clean_architecture/data/models/local_survey_model.dart';
 import 'package:flutter_tdd_clean_architecture/domain/entities/entities.dart';
+import 'package:flutter_tdd_clean_architecture/domain/helpers/helpers.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 import 'package:meta/meta.dart';
@@ -14,6 +15,10 @@ class LocalLoadSurveys {
 
   Future<List<SurveyEntity>> load() async {
    final data=await fetchCacheStorage.fetch('surveys');
+
+   if(data.isEmpty){
+    throw DomainError.unexpected;
+   }
    return data.map<SurveyEntity>((json)=>LocalSurveyModel.fromJson(json).toEntity()).toList();
   }
 }
@@ -70,5 +75,14 @@ data=list;
       SurveyEntity(id: data[0]['id'], question: data[0]['question'], dateTime: DateTime.utc(2012,02,27), didAnswer: false),
       SurveyEntity(id: data[1]['id'], question: data[1]['question'], dateTime: DateTime.utc(2019,02,27), didAnswer: false)
     ]);
+  }); 
+  
+   test('Should throw UnexpectedError if cache is empty', () async {
+    
+    mockFetch([]);
+
+    final future =  sut.load();
+
+    expect(future, throwsA(DomainError.unexpected) );
   });
 }
