@@ -39,7 +39,7 @@ O objetivo do treinamento é mostrar como criar um aplicativo com Flutter usando
 * Composition Over Inheritance
 * Small Commits
 
-> ## Design Patterns
+> ## Design Patterns 
 
 * Factory
 * Adapter

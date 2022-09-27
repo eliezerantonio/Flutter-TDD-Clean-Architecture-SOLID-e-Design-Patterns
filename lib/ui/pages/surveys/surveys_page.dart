@@ -12,23 +12,23 @@ class SurveysPage extends StatelessWidget {
   const SurveysPage(this.presenter);
   @override
   Widget build(BuildContext context) {
-      presenter.loadData();
-
 
     return Scaffold(
       appBar: AppBar(
         title: Text(R.string.surveys),
       ),
       body: Builder(builder: (context) {
-        presenter.isLoadingStream.listen((isLoading) {
-          if (isLoading == true) {
-            showLoading(context);
-          } else {
-            hideLoading(context);
-          }
-        });
-      
 
+        presenter.isLoadingStream.listen((isLoading) {
+            if (isLoading == true) {
+              showLoading(context);
+            } else {
+              hideLoading(context);
+            }
+          },
+        );
+      
+       presenter.loadData();
         return StreamBuilder<List<SurveyViewModel>>(
             stream: presenter.loadSurveysStrem,
             builder: (context, snapshot) {

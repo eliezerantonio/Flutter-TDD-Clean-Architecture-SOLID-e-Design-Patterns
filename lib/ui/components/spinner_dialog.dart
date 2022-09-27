@@ -9,7 +9,7 @@ void showLoading(BuildContext context) {
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircularProgressIndicator(),
+            CircularProgressIndicator(color:Theme.of(context).primaryColor),
             SizedBox(height: 10),
             Text("Aguarde ...", textAlign: TextAlign.center)
           ],
