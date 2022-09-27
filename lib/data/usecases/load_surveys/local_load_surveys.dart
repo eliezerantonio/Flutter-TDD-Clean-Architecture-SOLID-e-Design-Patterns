@@ -28,4 +28,9 @@ try {
       throw DomainError.unexpected;
     }
   }
+
+  Future<void> validate()async{
+ await cacheStorage.fetch('surveys');
+
+  }
 }
