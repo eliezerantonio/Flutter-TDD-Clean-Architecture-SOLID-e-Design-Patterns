@@ -6,7 +6,7 @@ import '../../../domain/usecases/usecases.dart';
 import '../../cache/chache.dart';
 import '../../models/models.dart';
 
-class LocalLoadSurveys implements LoadSurveys{
+class LocalLoadSurveys implements LoadSurveys {
   final CacheStorage cacheStorage;
 
   LocalLoadSurveys({
@@ -14,30 +14,39 @@ class LocalLoadSurveys implements LoadSurveys{
   });
 
   Future<List<SurveyEntity>> load() async {
-
-try {
-   final data=await cacheStorage.fetch('surveys');
+    try {
+      final data = await cacheStorage.fetch('surveys');
       if (data?.isEmpty != false) {
         throw Exception();
       }
-   return _map(data);
+      return _mapToEntity(data);
     } catch (error) {
       throw DomainError.unexpected;
     }
   }
 
-  Future<void> validate()async{
+  Future<void> validate() async {
+    try {
+      final data = await cacheStorage.fetch('surveys');
 
-try{
- final data =await cacheStorage.fetch('surveys');
+      _mapToEntity(data);
+    } catch (error) {
+      await cacheStorage.delete('surveys');
+    }
+  } 
+  
+   Future<void> save(List<SurveyEntity> surveys) async {
+      final data = await cacheStorage.save(key:'surveys', value:_mapToJson(surveys));
 
-
-
-_map(data);
-}catch (error) {
-  await cacheStorage.delete('surveys');
-}
+    
+   
   }
 
-  List<SurveyEntity>_map(List<Map>list)=>list.map<SurveyEntity>((json) => LocalSurveyModel.fromJson(json).toEntity()).toList();
+  List<SurveyEntity> _mapToEntity(List<Map> list) => list
+      .map<SurveyEntity>((json) => LocalSurveyModel.fromJson(json).toEntity())
+      .toList();
+      
+  List<Map> _mapToJson(List<SurveyEntity> list) => list
+      .map((entity) => LocalSurveyModel.fromEntity(entity).toJson())
+      .toList();
 }

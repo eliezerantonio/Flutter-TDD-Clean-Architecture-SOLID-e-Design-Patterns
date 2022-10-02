@@ -15,7 +15,6 @@ class RemoteLoadSurveys  implements LoadSurveys{
   Future<List<SurveyEntity>> load() async {
     try {
 
-
       final httpResponse = await httpClient.request(url: url, method: 'get');
 
       return httpResponse.map<SurveyEntity>((json) => RemoteSurveyModel.fromJson(json).toEntity()).toList();
