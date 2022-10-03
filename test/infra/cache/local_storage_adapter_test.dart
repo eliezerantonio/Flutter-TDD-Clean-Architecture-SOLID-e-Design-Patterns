@@ -16,8 +16,8 @@ void main() {
   LocalStorageSpy localStorage;
   LocalStorageAdapter sut;
 
-  mockDeleteItemError()=>when(localStorage.deleteItem(any)).thenThrow(Exception());
-  mocSetItemError()=>when(localStorage.setItem(any,any)).thenThrow(Exception());
+  mockDeleteCacheError()=>when(localStorage.deleteItem(any)).thenThrow(Exception());
+  mocSaveError()=>when(localStorage.setItem(any,any)).thenThrow(Exception());
 
   setUp(() {
     key = faker.randomGenerator.string(5);
@@ -35,7 +35,7 @@ void main() {
   
   
    test('Should throw if deleteItem throws', () async {
-    mockDeleteItemError();
+    mockDeleteCacheError();
    final future=  sut.save(key: key, value: value);
 
    expect (future,throwsA(TypeMatcher<Exception>()) );
@@ -45,11 +45,15 @@ void main() {
   
   
   test('Should throw if throws', () async {
-    mocSetItemError();
+    mocSaveError();
    final future=  sut.save(key: key, value: value);
 
    expect (future,throwsA(TypeMatcher<Exception>()) );
 
   
   });
+
+
+
+
 }
