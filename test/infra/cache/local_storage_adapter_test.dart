@@ -4,7 +4,6 @@ import 'package:flutter_tdd_clean_architecture/infra/cache/cache.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 import 'package:localstorage/localstorage.dart';
-import 'package:meta/meta.dart';
 
 class LocalStorageSpy extends Mock implements LocalStorage {}
 
@@ -14,9 +13,10 @@ void main() {
   LocalStorageSpy localStorage;
   LocalStorageAdapter sut;
 
-  mockDeleteError() =>
-      when(localStorage.deleteItem(any)).thenThrow(Exception());
-  mocSaveError() => when(localStorage.setItem(any, any)).thenThrow(Exception());
+  mockDeleteError() =>when(localStorage.deleteItem(any)).thenThrow(Exception());
+  mockSaveError() => when(localStorage.setItem(any, any)).thenThrow(Exception());
+
+
 
   setUp(() {
     key = faker.randomGenerator.string(5);
@@ -40,7 +40,7 @@ void main() {
     });
 
     test('Should throw if throws', () async {
-      mocSaveError();
+      mockSaveError();
       final future = sut.save(key: key, value: value);
 
       expect(future, throwsA(TypeMatcher<Exception>()));
@@ -64,10 +64,26 @@ void main() {
   
   
   group('Fetch', () {
+  String result;
+  mockFetch() => when(localStorage.getItem(any,)).thenAnswer((_) async=> result);
+ 
+
+     setUp(() {
+     mockFetch();
+      });
+
+
     test('Should call localStorage with correct values', () async {
       await sut.fetch(key);
 
       verify(localStorage.getItem(key)).called(1);
+    });  
+    
+    
+    test('Should return same value as localStorage', () async {
+    final data=  await sut.fetch(key);
+
+      expect(data, result);
     });
   
   });

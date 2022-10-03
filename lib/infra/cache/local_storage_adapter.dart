@@ -1,8 +1,10 @@
 import 'package:localstorage/localstorage.dart';
 import 'package:meta/meta.dart';
 
+import '../../data/cache/chache.dart';
 
-class LocalStorageAdapter {
+
+class LocalStorageAdapter  implements CacheStorage{
   final LocalStorage localStorage;
 
   LocalStorageAdapter({@required this.localStorage});
@@ -18,8 +20,8 @@ class LocalStorageAdapter {
 
   }
   
-   Future<void>fetch(String key)async{
+   Future<dynamic>fetch(String key)async{
  
-   localStorage.getItem(key);
+   return await localStorage.getItem(key);
   }
 }
