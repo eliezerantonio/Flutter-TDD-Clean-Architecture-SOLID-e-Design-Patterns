@@ -27,6 +27,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_secure_storage: ^5.0.2
+  localstorage:
   get: ^4.6.1
   http: ^0.13.4
   intl: ^0.17.0
