@@ -1,5 +1,5 @@
+import 'package:flutter_tdd_clean_architecture/main/composites/composites.dart';
 import 'package:flutter_tdd_clean_architecture/presentation/protocols/protocols.dart';
-import 'package:flutter_tdd_clean_architecture/validation/validators/validators.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
