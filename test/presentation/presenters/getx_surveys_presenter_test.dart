@@ -24,6 +24,7 @@ void main() {
             question: faker.lorem.sentence(),
             dateTime: DateTime(2022, 08, 23),
             didAnswer: true),
+            
         SurveyEntity(
             id: faker.guid.guid(),
             question: faker.lorem.sentence(),
