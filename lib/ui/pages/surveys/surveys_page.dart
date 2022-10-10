@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tdd_clean_architecture/ui/pages/pages.dart';
 
 import '../../components/componets.dart';
+import '../../components/reload_screen.dart';
 import '../../helpers/i18n/i18n.dart';
 import 'components/components.dart';
 
@@ -33,16 +34,7 @@ class SurveysPage extends StatelessWidget {
             stream: presenter.loadSurveysStrem,
             builder: (context, snapshot) {
               if (snapshot.hasError) {
-                return Padding(
-                  padding: const EdgeInsets.all(40),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                    Text(snapshot.error, style:TextStyle(fontSize: 16,), textAlign: TextAlign.center),
-                    SizedBox(height:10),
-                    ElevatedButton(onPressed: presenter.loadData, child: Text(R.string.reload))
-                  ]),
-                );
+                return ReloadScreen(error:snapshot.error, reload:presenter.loadData,);
               }
               if (snapshot.hasData) {
                 return Padding(
