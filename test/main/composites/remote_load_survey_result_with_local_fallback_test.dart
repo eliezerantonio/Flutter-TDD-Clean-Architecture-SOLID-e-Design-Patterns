@@ -9,9 +9,8 @@ class RemoteLoadSurveyResultWithLocalFallback {
 
   RemoteLoadSurveyResultWithLocalFallback({@required this.remote});
 
-
   Future<void> loadBySurvey({String surveyId}) async {
-    remote.loadBySurvey(surveyId:surveyId);
+    remote.loadBySurvey(surveyId: surveyId);
   }
 }
 
@@ -19,11 +18,17 @@ class RemoteLoadSurveyResultSpy extends Mock implements RemoteLoadSurveyResult {
 }
 
 void main() {
-  test('Should call remote LoadBySurvey', () async {
-    final String surveyId = faker.guid.guid();
-    final remote = RemoteLoadSurveyResultSpy();
-    final sut = RemoteLoadSurveyResultWithLocalFallback(remote:remote);
+   String surveyId;
+   RemoteLoadSurveyResultSpy remote;
+   RemoteLoadSurveyResultWithLocalFallback sut;
 
+  setUp(() {
+    surveyId = faker.guid.guid();
+    remote = RemoteLoadSurveyResultSpy();
+    sut = RemoteLoadSurveyResultWithLocalFallback(remote: remote);
+  });
+
+  test('Should call remote LoadBySurvey', () async {
     await sut.loadBySurvey(surveyId: surveyId);
 
     verify(remote.loadBySurvey(surveyId: surveyId)).called(1);
