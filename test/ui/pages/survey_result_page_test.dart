@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_tdd_clean_architecture/ui/helpers/errors/errors.dart';
+import 'package:flutter_tdd_clean_architecture/ui/pages/survey_result/components/survey_result.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 
@@ -17,11 +18,11 @@ void main() {
 
   StreamController<bool> isLoadingController;
 
-  StreamController<dynamic> surveyResultController;
+  StreamController<SurveyResultViewModel> surveyResultController;
   void initStreams() {
   
     isLoadingController= new StreamController<bool>();
-    surveyResultController=new StreamController<dynamic>();
+    surveyResultController=new StreamController<SurveyResultViewModel>();
   }
 
 
@@ -61,6 +62,14 @@ void main() {
    
   }
 
+
+SurveyResultViewModel makeSurveyResult()=>SurveyResultViewModel(surveyId:'Any id' , question: 'Question', answers: [
+
+
+  SurveyAnswerViewModel(image:'Image 0',answer: 'Answer 0', isCurrentAnswer: true, percent: '60%'),
+
+  SurveyAnswerViewModel(answer: 'Answer 1', isCurrentAnswer: false, percent: '40%'),
+]);
 
 tearDown(() {
 
@@ -123,6 +132,50 @@ testWidgets('Should Present error if loadSurveysStream fails', (WidgetTester tes
     await tester.tap(find.text("Recarregar"));
 
     verify(presenter.loadData()).called(2);
+
+  });
+
+
+
+   testWidgets('Should call LoadSurveyResult on reload button click',(WidgetTester tester)async{
+
+    await loadPage(tester);
+
+    surveyResultController.addError(UIError.unexpected.description);
+  
+    await tester.pump();
+
+   expect(find.text('Deu errado, tente novamente'), findsOneWidget);
+   expect(find.text('Recarregar'), findsOneWidget);
+   expect(find.text('Question'), findsNothing);
+ 
+  });
+
+  testWidgets('Should present valid data if surveyResultStream succeeds',(WidgetTester tester)async{
+
+    await loadPage(tester);
+
+    surveyResultController.add(makeSurveyResult());
+  
+    await provideMockedNetworkImages(()async{
+
+    await tester.pump();
+
+  } );
+
+   expect(find.text('Deu errado, tente novamente'), findsNothing);
+   expect(find.text('Recarregar'), findsNothing);
+   expect(find.text('Question'), findsOneWidget);
+   expect(find.text('Answer 0'), findsOneWidget);
+   expect(find.text('Answer 1'), findsOneWidget);
+   expect(find.text('60%'), findsOneWidget);
+   expect(find.text('40%'), findsOneWidget);
+   expect(find.byType(ActiveIcon), findsOneWidget);
+   expect(find.byType(DisabledIcon), findsOneWidget);
+
+   final image =tester.widget<Image>(find.byType(Image)).image as NetworkImage;
+
+   expect(image.url, 'Image 0');
 
   });
 
