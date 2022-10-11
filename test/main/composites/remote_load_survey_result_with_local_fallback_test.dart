@@ -1,4 +1,5 @@
 import 'package:faker/faker.dart';
+import 'package:flutter_tdd_clean_architecture/domain/helpers/helpers.dart';
 import 'package:meta/meta.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -34,8 +35,8 @@ void main() {
 
   SurveyResultEntity surveyResult;
 
-  void mockSurveyResult() {
-    surveyResult = SurveyResultEntity(
+  SurveyResultEntity mockSurveyResult() =>
+     SurveyResultEntity(
         surveyId: faker.guid.guid(),
         question: faker.lorem.sentence(),
         answers: [
@@ -46,9 +47,23 @@ void main() {
             percent: 40,
           ),
         ]);
-    when(remote.loadBySurvey(surveyId: anyNamed('surveyId')))
-        .thenAnswer((_) async => surveyResult);
+  
+  
+PostExpectation mockRemoteLoadCall()=>when(remote.loadBySurvey(surveyId: anyNamed('surveyId')));
+
+void mockRemoteLoad()
+
+{
+surveyResult =mockSurveyResult();
+
+mockRemoteLoadCall().thenAnswer((_)async=>surveyResult);
+}
+
+
+ void mockRemoteLoadError(DomainError error) {
+    mockRemoteLoadCall().thenThrow(error);
   }
+
 
   setUp(() {
     surveyId = faker.guid.guid();
@@ -56,8 +71,10 @@ void main() {
     local = LocalLoadSurveyResultSpy();
     sut = RemoteLoadSurveyResultWithLocalFallback(remote: remote, local: local);
 
-    mockSurveyResult();
+    mockRemoteLoad();
   });
+
+
 
   test('Should call remote LoadBySurvey', () async {
     await sut.loadBySurvey(surveyId: surveyId);
@@ -76,4 +93,13 @@ void main() {
 
     expect(result,surveyResult);
   });
+
+
+  test('Should rethrow if remote loadBySurvey throws AccessDeniedError', () async {
+    mockRemoteLoadError(DomainError.accessDenied);
+    final future = sut.loadBySurvey(surveyId: surveyId);
+
+    expect(future, throwsA(DomainError.accessDenied));
+  });
+
 }
