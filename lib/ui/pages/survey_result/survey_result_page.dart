@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import '../../mixins/mixins.dart';
 import '/ui/components/componets.dart';
 
 import '../../helpers/i18n/i18n.dart';
 import '../pages.dart';
 import 'components/components.dart';
 
-class SurveyResultPage extends StatelessWidget {
+class SurveyResultPage extends StatelessWidget
+    with LoadingManager, SessionManager {
   SurveyResultPage(this.presenter);
 
   final SurveyResultPresenter presenter;
@@ -18,40 +19,30 @@ class SurveyResultPage extends StatelessWidget {
       ),
       body: Builder(
         builder: (context) {
-          presenter.isLoadingStream.listen((isLoading) {
-            if (isLoading == true) {
-              showLoading(context);
-            } else {
-              hideLoading(context);
-            }
-          });
+          handleLoading(context, presenter.isLoadingStream);
 
-  presenter.isSessionExpiredStream.listen((isExpired) {
-            if (isExpired == true) {
-              Get.offAllNamed('/login');
-            } 
-          },
-        );
+          handleSessionExpired(presenter.isSessionExpiredStream);
+          
           presenter.loadData();
           return StreamBuilder<dynamic>(
-            stream: presenter.surveyResultStream,
-            builder: (context, snapshot) {
-
-
+              stream: presenter.surveyResultStream,
+              builder: (context, snapshot) {
                 if (snapshot.hasError) {
-                return ReloadScreen(error:snapshot.error, reload:presenter.loadData,);
-              }
-              if (snapshot.hasData) {
+                  return ReloadScreen(
+                    error: snapshot.error,
+                    reload: presenter.loadData,
+                  );
+                }
+                if (snapshot.hasData) {
                   return SurveyResult(snapshot.data);
-              }
-             
+                }
 
-             return SizedBox(height: 0,);
-            }
-          );
+                return SizedBox(
+                  height: 0,
+                );
+              });
         },
       ),
     );
   }
 }
-

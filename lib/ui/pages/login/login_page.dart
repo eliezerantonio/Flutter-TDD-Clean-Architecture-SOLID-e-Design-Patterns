@@ -5,53 +5,29 @@ import 'package:provider/provider.dart';
 import '../../components/componets.dart';
 import '../../helpers/errors/errors.dart';
 import '../../helpers/i18n/resources.dart';
+import '../../mixins/mixins.dart';
 import '../pages.dart';
 import 'components/components.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatelessWidget  with KeyboardManager, LoadingManager, UIErrorManager,NavigationManager{
   const LoginPage(this.presenter);
 
   final LoginPresenter presenter;
 
   @override
   Widget build(BuildContext context) {
-    void _hideKeyboard() {
-      final currectFocus = FocusScope.of(context);
-      if (!currectFocus.hasPrimaryFocus) {
-        currectFocus.unfocus();
-      }
-    }
+    
 
     return Scaffold(
       body: Builder(builder: (context) {
-        presenter.isLoadingStream.listen((isLoading) {
 
+        handleLoading(context, presenter.isLoadingStream);
+        
+        handleMainError(context, presenter.mainErrorStream);
 
-            if (isLoading==true) {
-              showLoading(context);
-            } else {
-              hideLoading(context);
-            }
-
-
-            
-          },
-        );
-
-        presenter.mainErrorStream.listen((UIError error) {
-          if (error != null) {
-            showErrorMessage(context, error.description);
-          }
-        });
-
-        presenter.navigateToStream.listen((page) {
-          if (page?.isNotEmpty == true) {
-            Get.offAllNamed(page);
-          }
-        });
-
+       handleNavigation(presenter.navigateToStream, clear:true);
         return GestureDetector(
-          onTap: _hideKeyboard,
+          onTap: ()=>hideKeyboard(context),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,

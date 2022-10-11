@@ -208,7 +208,7 @@ testWidgets('Should Present error if loadSurveysStream fails', (WidgetTester tes
 
     expect(Get.currentRoute, '/survey_result/any_survey_id');
 
-     isSessionExpiredController.add(null);
+    isSessionExpiredController.add(null);
     await tester.pump();
 
     expect(Get.currentRoute, '/survey_result/any_survey_id');
