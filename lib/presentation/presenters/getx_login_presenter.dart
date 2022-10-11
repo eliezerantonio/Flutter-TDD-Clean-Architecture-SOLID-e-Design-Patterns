@@ -8,7 +8,7 @@ import '../../ui/pages/pages.dart';
 import '../mixins/mixins.dart';
 import '../protocols/protocols.dart';
 
-class GetxLoginPresenter extends GetxController with LoadingManager implements LoginPresenter {
+class GetxLoginPresenter extends GetxController with LoadingManager,NavigationManager, FormManager,UIErrorManager implements LoginPresenter {
   GetxLoginPresenter({
     @required this.authentication,
     @required this.validation,
@@ -22,19 +22,12 @@ class GetxLoginPresenter extends GetxController with LoadingManager implements L
   String _password;
   var _emailError = Rx<UIError>(null);
   var _passwordError = Rx<UIError>(null);
-  var _mainError = Rx<UIError>(null);
-  var _navigateTo = RxString('');
-  var _isFormValid = false.obs;
+
 
   Stream<UIError> get emailErrorStream => _emailError.stream;
 
   Stream<UIError> get passwordErrorStream => _passwordError.stream;
 
-  Stream<UIError> get mainErrorStream => _mainError.stream;
-
-  Stream<String> get navigateToStream => _navigateTo.stream;
-
-  Stream<bool> get isFormValidStream => _isFormValid.stream;
 
   void validateEmail(String email) {
     _email = email;
@@ -75,7 +68,7 @@ class GetxLoginPresenter extends GetxController with LoadingManager implements L
   }
 
   void _validadeForm() {
-    _isFormValid.value = _emailError.value == null &&
+    isFormValid = _emailError.value == null &&
         _passwordError.value == null &&
         _email != null &&
         _password != null;
@@ -83,20 +76,20 @@ class GetxLoginPresenter extends GetxController with LoadingManager implements L
 
   Future<void> auth() async {
     try {
-      _mainError.value = null;
+      mainError = null;
       isLoading = true;
       final account = await authentication
           .auth(AuthenticationParams(email: _email, secret: _password));
       await saveCurrentAccount.save(account);
-      _navigateTo.value = "/surveys";
+      navigateTo = "/surveys";
     } on DomainError catch (error) {
       switch (error) {
         case DomainError.invalidCredentials:
-          _mainError.value = UIError.invalidCredentials;
+          mainError = UIError.invalidCredentials;
           break;
 
         default:
-          _mainError.value = UIError.unexpected;
+          mainError = UIError.unexpected;
       }
       isLoading = false;
     }
@@ -104,6 +97,6 @@ class GetxLoginPresenter extends GetxController with LoadingManager implements L
 
   @override
   void goToSignUp() {
-    _navigateTo.value = "/signup";
+    navigateTo = "/signup";
   }
 }
