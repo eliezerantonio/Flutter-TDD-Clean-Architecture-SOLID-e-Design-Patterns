@@ -4,11 +4,11 @@ import '../../data/cache/chache.dart';
 import '../../data/http/http.dart';
 
 class AuthorizeHttpClientDecorator  implements HttpClient{
-  final FetchSecureCacheStorage fetchSecureCacheStorage;
-  final DeleteSecureCacheStorage deleteSecureCacheStorage;
+  final FetchSecureCacheStorage fetchCacheStorage;
+  final DeleteSecureCacheStorage deleteCacheStorage;
   final HttpClient decoratee;
 
-  AuthorizeHttpClientDecorator({@required this.fetchSecureCacheStorage,@required this.deleteSecureCacheStorage, @required this.decoratee});
+  AuthorizeHttpClientDecorator({@required this.fetchCacheStorage,@required this.deleteCacheStorage, @required this.decoratee});
 
   Future<dynamic> request({
     @required String url,
@@ -19,7 +19,7 @@ class AuthorizeHttpClientDecorator  implements HttpClient{
   }) async {
    try {
   
-    final token= await fetchSecureCacheStorage.fetchSecure('token');
+    final token= await fetchCacheStorage.fetch('token');
     final authorizedHeaders= headers?? {}..addAll( {'x-access-token':token});
     return  await decoratee.request(url: url, method: method, body:body, headers:authorizedHeaders);
    }
@@ -27,7 +27,7 @@ class AuthorizeHttpClientDecorator  implements HttpClient{
       if(error is HttpError && error !=HttpError.forbidden){
          rethrow;
       }
-  await deleteSecureCacheStorage.deleteSecure('token');
+  await deleteCacheStorage.delete('token');
     
    throw HttpError.forbidden;
 

@@ -15,7 +15,7 @@ void main() {
   FechSecureCacheStorageSpy fechSecureCacheStorage;
   String token;
   PostExpectation mockSecureCall() =>
-      when(fechSecureCacheStorage.fetchSecure(any));
+      when(fechSecureCacheStorage.fetch(any));
   void mockFetchSecure() {
     mockSecureCall().thenAnswer((_) async => token);
   }
@@ -34,7 +34,7 @@ void main() {
 
   test('Should call FetchSecureCaheStorage with currect value', () async {
     await sut.load();
-    verify(fechSecureCacheStorage.fetchSecure('token'));
+    verify(fechSecureCacheStorage.fetch('token'));
   });
   test('Should return an AccountEntity', () async {
     final account = await sut.load();
