@@ -79,17 +79,20 @@ PostExpectation  mockLoadSurveysCall()=> when(loadSurveys.load());
   }); 
   
   test('Should emit correct events on failure', () async {
-       expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
     mockLoadSurveysError();
-    sut.loadSurveysStrem.listen(null,onError:
-      expectAsync1(
-        (error) => expect(
-          error,
-          UIError.unexpected.description
-        ),
-      ),
-    );
+    sut.loadSurveysStrem.listen(null,onError:expectAsync1((error) => expect(error,UIError.unexpected.description),), );
 
     await sut.loadData();
   });
+
+
+
+test('Shoul go to SurveyResultPage on survey click', ()async{
+sut.navigateToStream.listen(expectAsync1((page) => expect(page, '/survey_result/any_route')));
+
+    sut.goToSurveyResult('any_route');
+  });
+  
 }
