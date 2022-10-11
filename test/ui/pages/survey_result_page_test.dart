@@ -3,7 +3,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_tdd_clean_architecture/ui/helpers/errors/errors.dart';
-import 'package:flutter_tdd_clean_architecture/ui/pages/survey_result/components/survey_result.dart';
+import 'package:flutter_tdd_clean_architecture/ui/pages/survey_result/components/components.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 
