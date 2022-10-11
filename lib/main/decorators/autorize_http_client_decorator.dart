@@ -5,9 +5,10 @@ import '../../data/http/http.dart';
 
 class AuthorizeHttpClientDecorator  implements HttpClient{
   final FetchSecureCacheStorage fetchSecureCacheStorage;
+  final DeleteSecureCacheStorage deleteSecureCacheStorage;
   final HttpClient decoratee;
 
-  AuthorizeHttpClientDecorator({@required this.fetchSecureCacheStorage, this.decoratee});
+  AuthorizeHttpClientDecorator({@required this.fetchSecureCacheStorage,@required this.deleteSecureCacheStorage, @required this.decoratee});
 
   Future<dynamic> request({
     @required String url,
@@ -16,16 +17,19 @@ class AuthorizeHttpClientDecorator  implements HttpClient{
     Map headers,
     
   }) async {
-try {
+   try {
   
     final token= await fetchSecureCacheStorage.fetchSecure('token');
     final authorizedHeaders= headers?? {}..addAll( {'x-access-token':token});
     return  await decoratee.request(url: url, method: method, body:body, headers:authorizedHeaders);
-} on HttpError{
-  rethrow;
-}
-catch (e) {
-  throw HttpError.forbidden;
+   } on HttpError{
+    rethrow;
+   }
+    catch (e) {
+
+      await deleteSecureCacheStorage.deleteSecure('token');
+   throw HttpError.forbidden;
+
 }
   }
 }
