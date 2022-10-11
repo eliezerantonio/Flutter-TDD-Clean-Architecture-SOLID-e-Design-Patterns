@@ -7,7 +7,7 @@ import '../../ui/helpers/errors/errors.dart';
 import '../../ui/pages/pages.dart';
 import '../mixins/mixins.dart';
 
-class GetxSurveyResultPresenter with SessionManager, LoadingManager, UIErrorManager implements SurveyResultPresenter {
+class GetxSurveyResultPresenter extends  GetxController with SessionManager, LoadingManager, UIErrorManager implements SurveyResultPresenter {
   GetxSurveyResultPresenter(
       {@required this.loadSurveyResult, @required this.surveyId});
   final LoadSurveyResult loadSurveyResult;

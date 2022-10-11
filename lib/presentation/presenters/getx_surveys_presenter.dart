@@ -8,7 +8,7 @@ import '../../ui/helpers/errors/errors.dart';
 import '../../ui/pages/surveys/surveys.dart';
 import '../mixins/mixins.dart';
 
-class GetxSurveysPresenter with SessionManager, LoadingManager implements SurveysPresenter {
+class GetxSurveysPresenter extends  GetxController with SessionManager, LoadingManager implements SurveysPresenter {
   
   final LoadSurveys loadSurveys;
   final _surveys = Rx<List<SurveyViewModel>>(null);

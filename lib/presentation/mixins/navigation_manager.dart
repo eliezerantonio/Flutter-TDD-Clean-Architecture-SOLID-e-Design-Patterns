@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:get/get.dart';
 
-mixin NavigationManager{
+mixin NavigationManager on GetxController{
 
   final _navigateTo = RxString('');
 
