@@ -10,7 +10,7 @@ import '../../ui/pages/surveys/surveys.dart';
 class GetxSurveysPresenter implements SurveysPresenter {
   final LoadSurveys loadSurveys;
   final _isLoading = true.obs;
-  final _surveys = Rx<List<SurveyViewModel>>([]);
+  final _surveys = Rx<List<SurveyViewModel>>(null);
 
   Stream<bool> get isLoadingStream => _isLoading.stream;
   Stream<List<SurveyViewModel>> get loadSurveysStrem => _surveys.stream;

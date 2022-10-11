@@ -1,14 +1,18 @@
-import 'package:meta/meta.dart';
-import './survey_result.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
-class SurveyResultViewModel{
+class SurveyAnswerViewModel extends Equatable{
 
-  final String surveyId;
-  final String question;
-  final List<SurveyAnswerViewModel>  answers;
+ 
+  final String image;
+  final String answer;
+  final bool isCurrentAnswer;
+  final String percent;
 
-
-  SurveyResultViewModel({@required this.surveyId,@required this.question,@required this.answers});
+  SurveyAnswerViewModel({this.image,@required this.answer,@required this.isCurrentAnswer,@required this.percent});
+  
+  @override
+  List<Object> get props => [ 'answer', 'isCurrentAnswer', 'percent','image'];
   
  
   

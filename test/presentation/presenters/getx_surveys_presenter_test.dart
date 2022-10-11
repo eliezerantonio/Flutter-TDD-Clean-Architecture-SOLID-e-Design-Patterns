@@ -48,11 +48,13 @@ PostExpectation  mockLoadSurveysCall()=> when(loadSurveys.load());
     mockLoadSurveys(mockValidData());
   });
   test('Should calll LoadSurveys on loadData', () async {
+       expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
     await sut.loadData();
     verify(loadSurveys.load()).called(1);
   });
 
   test('Should emit correct events on success', () async {
+       expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
     sut.loadSurveysStrem.listen(
       expectAsync1(
         (surveys) => expect(
@@ -77,6 +79,7 @@ PostExpectation  mockLoadSurveysCall()=> when(loadSurveys.load());
   }); 
   
   test('Should emit correct events on failure', () async {
+       expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
     mockLoadSurveysError();
     sut.loadSurveysStrem.listen(null,onError:
       expectAsync1(
