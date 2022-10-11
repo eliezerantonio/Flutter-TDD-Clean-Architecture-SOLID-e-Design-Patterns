@@ -37,7 +37,7 @@ dependencies:
 dev_dependencies:
   faker: null
   flutter_launcher_icons: ^0.9.2
-  image_test_utils: ^1.0.0
+  network_image_mock:
   flutter_test:
     sdk: flutter
   mockito: null

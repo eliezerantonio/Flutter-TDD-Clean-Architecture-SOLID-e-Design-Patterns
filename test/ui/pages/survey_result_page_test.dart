@@ -8,8 +8,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 
 import 'package:flutter_tdd_clean_architecture/ui/pages/pages.dart';
-import 'package:image_test_utils/image_test_utils.dart';
 import 'package:mockito/mockito.dart';
+import 'package:network_image_mock/network_image_mock.dart';
 
 class SurveyResultPresenterSpy extends Mock implements SurveyResultPresenter {}
 
@@ -64,7 +64,7 @@ void main() {
       ],
     );
 
-  await  provideMockedNetworkImages(() async {
+  await  mockNetworkImagesFor(() async {
        await tester.pumpWidget(surveysPage);
     });
 
@@ -166,11 +166,9 @@ testWidgets('Should Present error if loadSurveysStream fails', (WidgetTester tes
 
     surveyResultController.add(makeSurveyResult());
   
-    await provideMockedNetworkImages(()async{
-
-    await tester.pump();
-
-  } );
+    await mockNetworkImagesFor(() async {
+      await tester.pump();
+    });
 
    expect(find.text('Deu errado, tente novamente'), findsNothing);
    expect(find.text('Recarregar'), findsNothing);
