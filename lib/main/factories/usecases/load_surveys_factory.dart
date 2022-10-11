@@ -10,7 +10,6 @@ import '../http/authorize_http_client_decorator_factory.dart';
 LoadSurveys makeRemoteLoadSurveys() => RemoteLoadSurveys(httpClient: makeAuthorizeHttpClientDecorator(), url: makeApiUrl('surveys'));
 
 
-
 LoadSurveys makeLocalLoadSurveys() => LocalLoadSurveys(cacheStorage:makeLocalStorageAdapter());
 
 
