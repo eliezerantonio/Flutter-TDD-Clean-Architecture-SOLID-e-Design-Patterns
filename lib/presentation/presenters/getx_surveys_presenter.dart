@@ -6,16 +6,14 @@ import '../../domain/helpers/helpers.dart';
 import '../../domain/usecases/usecases.dart';
 import '../../ui/helpers/errors/errors.dart';
 import '../../ui/pages/surveys/surveys.dart';
+import '../mixins/mixins.dart';
 
-class GetxSurveysPresenter implements SurveysPresenter {
+class GetxSurveysPresenter with SessionManager, LoadingManager implements SurveysPresenter {
+  
   final LoadSurveys loadSurveys;
-  final _isLoading = true.obs;
-  final _isSessionExpired = RxBool(null);
   final _surveys = Rx<List<SurveyViewModel>>(null);
   final _navigateTo=RxString('');
 
-  Stream<bool> get isLoadingStream => _isLoading.stream;
-  Stream<bool> get isSessionExpiredStream => _isSessionExpired.stream;
   Stream<List<SurveyViewModel>> get loadSurveysStrem => _surveys.stream;
   Stream<String> get  navigateToStream =>_navigateTo.stream;
 
@@ -26,7 +24,7 @@ class GetxSurveysPresenter implements SurveysPresenter {
    try{
 
 
-    _isLoading.value = true;
+    isLoading = true;
     final surveys = await loadSurveys.load();
 
     _surveys.value = surveys.map((survey) => SurveyViewModel(
@@ -38,12 +36,12 @@ class GetxSurveysPresenter implements SurveysPresenter {
 
    } on DomainError catch(error) {
       if (error == DomainError.accessDenied) {
-        _isSessionExpired.value = true;
+        isSessionExpired = true;
       } else {
         _surveys.subject.addError(UIError.unexpected.description);
       }
    } finally{
-     _isLoading.value = false;
+     isLoading = false;
    }
    
   }
