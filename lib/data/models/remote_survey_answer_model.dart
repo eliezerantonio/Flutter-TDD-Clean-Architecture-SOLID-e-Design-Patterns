@@ -32,6 +32,8 @@ class RemoteSurveyAnswerModel {
     );
   }
 
+  
+
   SurveyAnswerEntity toEntity() => SurveyAnswerEntity(
         image: image,
         answer: answer,
