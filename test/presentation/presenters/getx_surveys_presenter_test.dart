@@ -40,7 +40,7 @@ PostExpectation  mockLoadSurveysCall()=> when(loadSurveys.load());
   }
 
   void mockLoadSurveysError()=>mockLoadSurveysCall().thenThrow(DomainError.unexpected);
-
+void mockAccessDeniedError() => mockLoadSurveysCall().thenThrow(DomainError.accessDenied);
   setUp(() {
     loadSurveys = LoadSurveysSpy();
 
@@ -93,6 +93,15 @@ test('Shoul go to SurveyResultPage on survey click', ()async{
 sut.navigateToStream.listen(expectAsync1((page) => expect(page, '/survey_result/any_route')));
 
     sut.goToSurveyResult('any_route');
+  });
+
+  test('Should emit correct events on access denied', () async {
+    mockAccessDeniedError();
+
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+    expectLater(sut.isSessionExpiredStream, emits(true));
+
+    await sut.loadData();
   });
   
 }

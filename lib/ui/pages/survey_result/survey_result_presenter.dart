@@ -1,7 +1,7 @@
 import 'survey_result.dart';
 
 abstract class SurveyResultPresenter{
-
+Stream <bool> get isSessionExpiredStream;
   Stream <bool> get isLoadingStream;
   Stream <SurveyResultViewModel> get surveyResultStream;
   
