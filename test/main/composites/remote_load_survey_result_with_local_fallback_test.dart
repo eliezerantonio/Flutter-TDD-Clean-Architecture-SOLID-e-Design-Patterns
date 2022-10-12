@@ -1,38 +1,13 @@
 import 'package:faker/faker.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter_tdd_clean_architecture/main/composites/composites.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import 'package:flutter_tdd_clean_architecture/domain/helpers/helpers.dart';
 import 'package:flutter_tdd_clean_architecture/data/usecases/load_survey_result/local_load_survey_result.dart';
 import 'package:flutter_tdd_clean_architecture/domain/entities/entities.dart';
-import 'package:flutter_tdd_clean_architecture/domain/usecases/load_survey_result.dart';
 import 'package:flutter_tdd_clean_architecture/data/usecases/load_survey_result/load_survey_result.dart';
 
-class RemoteLoadSurveyResultWithLocalFallback implements LoadSurveyResult {
-  final RemoteLoadSurveyResult remote;
-  final LocalLoadSurveyResult local;
-
-  RemoteLoadSurveyResultWithLocalFallback(
-      {@required this.remote, @required this.local});
-
-  Future<SurveyResultEntity> loadBySurvey({String surveyId}) async {
- try {
-
-
-   final remoteResult = await remote.loadBySurvey(surveyId: surveyId);
-    await local.save(surveyId: surveyId, surveyResult: remoteResult);
-    return remoteResult;
-
- }catch(error){
-if (error == DomainError.accessDenied) {
-        rethrow;
-      }
-  await local.validate(surveyId);
- return await local.loadBySurvey(surveyId: surveyId);
- }
-  }
-}
 
 class RemoteLoadSurveyResultSpy extends Mock implements RemoteLoadSurveyResult {
 }
