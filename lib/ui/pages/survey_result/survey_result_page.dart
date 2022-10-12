@@ -19,10 +19,11 @@ class SurveyResultPage extends StatelessWidget
       ),
       body: Builder(
         builder: (context) {
-          presenter.loadData();
           handleLoading(context, presenter.isLoadingStream);
 
           handleSessionExpired(presenter.isSessionExpiredStream);
+          
+          presenter.loadData();
 
           return StreamBuilder<dynamic>(
               stream: presenter.surveyResultStream,

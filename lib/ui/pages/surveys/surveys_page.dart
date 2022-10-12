@@ -32,12 +32,12 @@ class _SurveysPageState extends State<SurveysPage> with LoadingManager, Navigati
         title: Text(R.string.surveys),
       ),
       body: Builder(builder: (context) {
-    widget.presenter.loadData();
         handleLoading(context, widget.presenter.isLoadingStream);
 
         handleSessionExpired(widget.presenter.isSessionExpiredStream);
         
         handleNavigation(widget.presenter.navigateToStream);
+      widget.presenter.loadData();
 
         return StreamBuilder<List<SurveyViewModel>>(
             stream: widget.presenter.loadSurveysStrem,
