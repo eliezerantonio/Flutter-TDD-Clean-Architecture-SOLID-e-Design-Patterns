@@ -231,6 +231,21 @@ testWidgets('Should Present error if loadSurveysStream fails', (WidgetTester tes
     verify(presenter.save(answer:'Answer 1')).called(1);
  
   });
+ testWidgets('Should not call save on current answer click',(WidgetTester tester)async{
+
+    await loadPage(tester);
+
+    surveyResultController.add(makeSurveyResult());
+
+    await mockNetworkImagesFor(() async {
+      await tester.pump();
+    });
+
+    await tester.tap(find.text('Answer 0'));
+
+    verifyNever(presenter.save(answer:'Answer 0'));
+ 
+  });
 
 
 }
