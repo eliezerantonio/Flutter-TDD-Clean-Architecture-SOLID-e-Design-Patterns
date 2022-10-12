@@ -20,16 +20,16 @@ class RemoteLoadSurveyResultWithLocalFallback implements LoadSurveyResult {
  try {
 
 
-   final surveyResult = await remote.loadBySurvey(surveyId: surveyId);
-    await local.save(surveyId: surveyId, surveyResult: surveyResult);
-    return surveyResult;
+   final remoteResult = await remote.loadBySurvey(surveyId: surveyId);
+    await local.save(surveyId: surveyId, surveyResult: remoteResult);
+    return remoteResult;
 
  }catch(error){
 if (error == DomainError.accessDenied) {
         rethrow;
       }
   await local.validate(surveyId);
-  await local.loadBySurvey(surveyId: surveyId);
+ return await local.loadBySurvey(surveyId: surveyId);
  }
   }
 }
@@ -45,7 +45,8 @@ void main() {
   LocalLoadSurveyResultSpy local;
   RemoteLoadSurveyResultWithLocalFallback sut;
 
-  SurveyResultEntity surveyResult;
+  SurveyResultEntity remoteResult;
+  SurveyResultEntity localResult;
 
   SurveyResultEntity mockSurveyResult() => SurveyResultEntity(
           surveyId: faker.guid.guid(),
@@ -60,11 +61,17 @@ void main() {
           ]);
 
   PostExpectation mockRemoteLoadCall() =>when(remote.loadBySurvey(surveyId: anyNamed('surveyId')));
+  PostExpectation mockLocalLoadCall() =>when(local.loadBySurvey(surveyId: anyNamed('surveyId')));
 
   void mockRemoteLoad() {
-    surveyResult = mockSurveyResult();
+    remoteResult = mockSurveyResult();
 
-    mockRemoteLoadCall().thenAnswer((_) async => surveyResult);
+    mockRemoteLoadCall().thenAnswer((_) async => remoteResult);
+  }
+  void mockLocalLoad() {
+    localResult = mockSurveyResult();
+
+    mockLocalLoadCall().thenAnswer((_) async => localResult);
   }
 
   void mockRemoteLoadError(DomainError error) {
@@ -78,6 +85,7 @@ void main() {
     sut = RemoteLoadSurveyResultWithLocalFallback(remote: remote, local: local);
 
     mockRemoteLoad();
+    mockLocalLoad();
   });
 
   test('Should call remote LoadBySurvey', () async {
@@ -89,14 +97,14 @@ void main() {
   test('Should call local save with remote data', () async {
     await sut.loadBySurvey(surveyId: surveyId);
 
-    verify(local.save(surveyId: surveyId, surveyResult: surveyResult))
+    verify(local.save(surveyId: surveyId, surveyResult: remoteResult))
         .called(1);
   });
 
   test('Should return remote data', () async {
     final result = await sut.loadBySurvey(surveyId: surveyId);
 
-    expect(result, surveyResult);
+    expect(result, remoteResult);
   });
 
   test('Should rethrow if remote loadBySurvey throws AccessDeniedError',
@@ -113,5 +121,14 @@ void main() {
 
     verify(local.validate(surveyId)).called(1);
     verify(local.loadBySurvey(surveyId:surveyId)).called(1);
+  }); 
+  
+   test('Should return local data',() async {
+     mockRemoteLoadError(DomainError.unexpected);
+  final response= await  sut.loadBySurvey(surveyId: surveyId);
+
+   expect(response, remoteResult);
+
+
   });
 }
