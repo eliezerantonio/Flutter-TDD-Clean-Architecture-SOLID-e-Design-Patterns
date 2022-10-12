@@ -30,6 +30,9 @@ class HttpAdapter implements HttpClient {
       }
       else if (method == 'get') {
         response = await client.get(Uri.parse(url), headers: defaultHeaders,).timeout(Duration(seconds: 5));
+      }  
+      else if (method == 'put') {
+        response = await client.put(Uri.parse(url), headers: defaultHeaders, body: jsonBody).timeout(Duration(seconds: 5));
       }
     } catch(error) {
       throw HttpError.serverError;
