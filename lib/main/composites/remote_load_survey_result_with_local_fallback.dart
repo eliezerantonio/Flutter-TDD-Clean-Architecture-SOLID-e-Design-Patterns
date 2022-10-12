@@ -18,7 +18,7 @@ class RemoteLoadSurveyResultWithLocalFallback implements LoadSurveyResult {
 
 
    final remoteResult = await remote.loadBySurvey(surveyId: surveyId);
-    await local.save(surveyId: surveyId, surveyResult: remoteResult);
+    await local.save(remoteResult);
     return remoteResult;
 
  }catch(error){

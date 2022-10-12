@@ -35,13 +35,13 @@ Future<void> validate(String surveyId) async {
 
 
 
-    Future<void> save({@required SurveyResultEntity surveyResult, @required String surveyId}) async {
+    Future<void> save( SurveyResultEntity surveyResult) async {
     try {
 
       final json =LocalSurveyResultModel.fromEntity(surveyResult).toJson();
 
     
-      await cacheStorage.save(key: 'survey_result/$surveyId' , value: json);
+      await cacheStorage.save(key: 'survey_result/${surveyResult.surveyId}' , value: json);
     } catch (error) {
       throw DomainError.unexpected;
     }
