@@ -10,12 +10,15 @@ import 'package:flutter_tdd_clean_architecture/ui/helpers/errors/errors.dart';
 import 'package:flutter_tdd_clean_architecture/ui/pages/pages.dart';
 
 class LoadSurveyResultSpy extends Mock implements LoadSurveyResult {}
+class SaveSurveyResultSpy extends Mock implements SaveSurveyResult {}
 
 void main() {
   LoadSurveyResultSpy loadSurveyResult;
+  SaveSurveyResultSpy saveSurveyResult;
   GetxSurveyResultPresenter sut;
   SurveyResultEntity surveyResult;
   String surveyId;
+  String answer;
 
   SurveyResultEntity mockValidData() => SurveyResultEntity(
         answers: [
@@ -49,11 +52,15 @@ void main() {
   setUp(() {
     surveyId = faker.guid.guid();
     loadSurveyResult = LoadSurveyResultSpy();
-    sut = GetxSurveyResultPresenter(
-        loadSurveyResult: loadSurveyResult, surveyId: surveyId);
+    saveSurveyResult=SaveSurveyResultSpy();
+    sut = GetxSurveyResultPresenter(loadSurveyResult: loadSurveyResult,saveSurveyResult:saveSurveyResult, surveyId: surveyId);
     mockLoadSurveyResult(mockValidData());
+    answer=faker.lorem.sentence();
   });
-  test('Should calll LoadSurveyResult on loadData', () async {
+ 
+ group('LoadData', (){
+
+   test('Should calll LoadSurveyResult on loadData', () async {
     expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
     await sut.loadData();
     verify(loadSurveyResult.loadBySurvey(surveyId:surveyId)).called(1);
@@ -109,4 +116,14 @@ void main() {
 
     await sut.loadData();
   });
+ });
+ 
+  group('Save', (){
+
+   test('Should calll SaveSurveyResult on save', () async {
+    await sut.save(answer:answer);
+    verify(saveSurveyResult.save(answer:answer)).called(1);
+  });
+
+ });
 }
