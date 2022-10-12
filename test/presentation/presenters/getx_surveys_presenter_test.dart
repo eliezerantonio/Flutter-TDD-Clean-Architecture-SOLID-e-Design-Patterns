@@ -89,11 +89,6 @@ void mockAccessDeniedError() => mockLoadSurveysCall().thenThrow(DomainError.acce
 
 
 
-test('Shoul go to SurveyResultPage on survey click', ()async{
-sut.navigateToStream.listen(expectAsync1((page) => expect(page, '/survey_result/any_route')));
-
-    sut.goToSurveyResult('any_route');
-  });
 
   test('Should emit correct events on access denied', () async {
     mockAccessDeniedError();
@@ -102,6 +97,13 @@ sut.navigateToStream.listen(expectAsync1((page) => expect(page, '/survey_result/
     expectLater(sut.isSessionExpiredStream, emits(true));
 
     await sut.loadData();
+  });
+test('Should go to SurveyResultPage on survey click', ()async{
+   expectLater(sut.navigateToStream, emitsInOrder(['/survey_result/any_route', '/survey_result/any_route']));
+
+
+    sut.goToSurveyResult('any_route');
+    sut.goToSurveyResult('any_route');
   });
   
 }
