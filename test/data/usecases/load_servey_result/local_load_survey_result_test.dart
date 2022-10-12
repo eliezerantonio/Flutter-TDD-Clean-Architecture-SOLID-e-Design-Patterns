@@ -39,7 +39,7 @@ void main() {
 
     void mockFetch(Map json) {
       data = json;
-      mockFetchCall().thenAnswer((_) async => data);
+      mockFetchCall().thenAnswer((_) async => json);
     }
 
     void mockFetchError() => mockFetchCall().thenThrow(Exception());
@@ -168,7 +168,7 @@ void main() {
 
     void mockFetch(Map json) {
       data = json;
-      mockFetchCall().thenAnswer((_) async => data);
+      mockFetchCall().thenAnswer((_) async => json);
     }
 
     setUp(() {
@@ -230,10 +230,8 @@ void main() {
     CacheStorageSpy cacheStorage;
     LocalLoadSurveyResult sut;
     SurveyResultEntity surveyResult;
-    String surveyId;
 
-    PostExpectation mockSaveCall() =>
-        when(cacheStorage.save(key: anyNamed('key'), value: anyNamed('value')));
+    PostExpectation mockSaveCall() => when(cacheStorage.save(key: anyNamed('key'), value: anyNamed('value')));
 
     void mockSaveError() => mockSaveCall().thenThrow(Exception());
 
@@ -255,7 +253,6 @@ void main() {
             ]);
 
     setUp(() {
-      surveyId = faker.guid.guid();
       cacheStorage = CacheStorageSpy();
       sut = LocalLoadSurveyResult(cacheStorage: cacheStorage);
       surveyResult = mockSurveyResult();
@@ -284,8 +281,7 @@ void main() {
   
       await sut.save( surveyResult, );
 
-      verify(cacheStorage.save(key: 'survey_result/$surveyId', value: json))
-          .called(1);
+      verify(cacheStorage.save(key: 'survey_result/${surveyResult.surveyId}', value: json)).called(1);
     });
 
     test('Should throw UnexpectedError if save throws', () async {
