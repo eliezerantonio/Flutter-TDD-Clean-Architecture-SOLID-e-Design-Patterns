@@ -1,3 +1,4 @@
+import 'package:flutter_tdd_clean_architecture/presentation/helpers/helpers.dart';
 import 'package:meta/meta.dart';
 import 'package:get/get.dart';
 
@@ -8,13 +9,9 @@ import '../../ui/helpers/errors/errors.dart';
 import '../../ui/pages/pages.dart';
 import '../mixins/mixins.dart';
 
-class GetxSurveyResultPresenter extends GetxController
-    with SessionManager, LoadingManager, UIErrorManager
-    implements SurveyResultPresenter {
-  GetxSurveyResultPresenter(
-      {@required this.loadSurveyResult,
-      @required this.saveSurveyResult,
-      @required this.surveyId});
+class GetxSurveyResultPresenter extends GetxController with SessionManager, LoadingManager, UIErrorManager  implements SurveyResultPresenter {
+  GetxSurveyResultPresenter({@required this.loadSurveyResult, @required this.saveSurveyResult, @required this.surveyId});
+  
   final LoadSurveyResult loadSurveyResult;
   final SaveSurveyResult saveSurveyResult;
   final String surveyId;
@@ -36,17 +33,7 @@ class GetxSurveyResultPresenter extends GetxController
       isLoading = true;
       final surveyResult = await action();
 
-      _surveyResult.value = SurveyResultViewModel(
-          surveyId: surveyResult.surveyId,
-          question: surveyResult.question,
-          answers: surveyResult.answers
-              .map((answer) => SurveyAnswerViewModel(
-                    image: answer.image,
-                    answer: answer.answer,
-                    isCurrentAnswer: answer.isCurrentAnswer,
-                    percent: '${answer.percent}',
-                  ))
-              .toList());
+      _surveyResult.subject.add(surveyResult.toViewModel() );
     } on DomainError catch (error) {
       if (error == DomainError.accessDenied) {
         isSessionExpired = true;
@@ -58,3 +45,6 @@ class GetxSurveyResultPresenter extends GetxController
     }
   }
 }
+
+
+
