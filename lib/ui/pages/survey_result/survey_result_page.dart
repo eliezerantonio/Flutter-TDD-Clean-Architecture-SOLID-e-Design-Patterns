@@ -22,7 +22,7 @@ class SurveyResultPage extends StatelessWidget
           handleLoading(context, presenter.isLoadingStream);
 
           handleSessionExpired(presenter.isSessionExpiredStream);
-          
+
           presenter.loadData();
           return StreamBuilder<dynamic>(
               stream: presenter.surveyResultStream,
@@ -34,12 +34,10 @@ class SurveyResultPage extends StatelessWidget
                   );
                 }
                 if (snapshot.hasData) {
-                  return SurveyResult(snapshot.data);
+                  return SurveyResult(viewModel:snapshot.data, onSave:presenter.save);
                 }
 
-                return SizedBox(
-                  height: 0,
-                );
+                return SizedBox(height: 0);
               });
         },
       ),
