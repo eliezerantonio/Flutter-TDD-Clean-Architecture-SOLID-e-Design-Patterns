@@ -25,11 +25,11 @@ class _SurveysPageState extends State<SurveysPage> with LoadingManager, Navigati
     final routeObserver=Get.find<RouteObserver>();
     routeObserver.subscribe(this, ModalRoute.of(context));
 
-  
 
     return Scaffold(
       appBar: AppBar(
         title: Text(R.string.surveys),
+        centerTitle: true,
       ),
       body: Builder(builder: (context) {
         handleLoading(context, widget.presenter.isLoadingStream);
@@ -37,7 +37,8 @@ class _SurveysPageState extends State<SurveysPage> with LoadingManager, Navigati
         handleSessionExpired(widget.presenter.isSessionExpiredStream);
         
         handleNavigation(widget.presenter.navigateToStream);
-      widget.presenter.loadData();
+
+        widget.presenter.loadData();
 
         return StreamBuilder<List<SurveyViewModel>>(
             stream: widget.presenter.loadSurveysStrem,
@@ -66,10 +67,11 @@ void didPopNext(){
 }
   @override   
   void dispose() {
+     final routeObserver=Get.find<RouteObserver>();
+    routeObserver.unsubscribe(this, );
     super.dispose();
    
-    final routeObserver=Get.find<RouteObserver>();
-    routeObserver.unsubscribe(this, );
+   
 
   }
 }

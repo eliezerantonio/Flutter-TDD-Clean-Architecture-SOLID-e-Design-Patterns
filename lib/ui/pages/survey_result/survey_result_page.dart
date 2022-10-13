@@ -16,6 +16,7 @@ class SurveyResultPage extends StatelessWidget
     return Scaffold(
       appBar: AppBar(
         title: Text(R.string.surveys),
+          centerTitle: true,
       ),
       body: Builder(
         builder: (context) {
@@ -25,7 +26,7 @@ class SurveyResultPage extends StatelessWidget
           
           presenter.loadData();
 
-          return StreamBuilder<dynamic>(
+          return StreamBuilder<SurveyResultViewModel>(
               stream: presenter.surveyResultStream,
               builder: (context, snapshot) {
                 if (snapshot.hasError) {

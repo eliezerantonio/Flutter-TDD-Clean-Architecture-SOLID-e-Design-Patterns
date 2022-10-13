@@ -11,6 +11,7 @@ class SurveyResult extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      physics: BouncingScrollPhysics(),
       itemBuilder: (context, index) {
         if (index == 0) {
           return SurveyHeader(question: viewModel.question);

@@ -11,6 +11,8 @@ import 'package:flutter_tdd_clean_architecture/ui/pages/pages.dart';
 import 'package:mockito/mockito.dart';
 import 'package:network_image_mock/network_image_mock.dart';
 
+import '../helpers/helpers.dart';
+
 class SurveyResultPresenterSpy extends Mock implements SurveyResultPresenter {}
 
 void main() {
@@ -51,21 +53,8 @@ void main() {
     initStreams();
     mockStreams();
 
-    final surveysPage = GetMaterialApp(
-      initialRoute: '/survey_result/any_survey_id',
-      getPages: [
-        GetPage(name: '/survey_result/:survey_id',page: () => SurveyResultPage(presenter),
-        
-        ),
-         GetPage(
-          name: '/login',
-          page: () =>Text("fake login"),
-        ),
-      ],
-    );
-
-  await  mockNetworkImagesFor(() async {
-       await tester.pumpWidget(surveysPage);
+    await  mockNetworkImagesFor(() async {
+    await tester.pumpWidget(makePage(path:'/survey_result/any_survey_id', page:()=> SurveyResultPage(presenter)));
     });
 
    
@@ -193,7 +182,7 @@ testWidgets('Should Present error if loadSurveysStream fails', (WidgetTester tes
     isSessionExpiredController.add(true);
     await tester.pumpAndSettle();
 
-    expect(Get.currentRoute, '/login');
+    expect(currentRoute, '/login');
     expect(find.text('fake login'), findsOneWidget);
 
 
@@ -206,12 +195,12 @@ testWidgets('Should Present error if loadSurveysStream fails', (WidgetTester tes
   isSessionExpiredController.add(false);
     await tester.pump();
 
-    expect(Get.currentRoute, '/survey_result/any_survey_id');
+    expect(currentRoute, '/survey_result/any_survey_id');
 
     isSessionExpiredController.add(null);
     await tester.pump();
 
-    expect(Get.currentRoute, '/survey_result/any_survey_id');
+    expect(currentRoute, '/survey_result/any_survey_id');
 
   });
 
