@@ -17,7 +17,7 @@ class SecureStorageAdapter implements SaveSecureCacheStorage, FetchSecureCacheSt
     return await secureStorage.read(key: key);
   }
    @override
-  Future<String> delete(String key) async {
+  Future<void> delete(String key) async {
      await secureStorage.delete(key: key);
   }
 }
